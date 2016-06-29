@@ -1,0 +1,43 @@
+* {
+    box-sizing: border-box;
+}
+
+.dummy1 {
+    height: 150px;
+    width: 200px;
+    float: left;
+    margin: 5px;
+    border: 1px solid blue;
+    padding: 15px;
+    text-align: center;
+}
+
+.subsection {
+    padding: 0 7px;
+}
+
+.subsection .content {
+    border: 1px solid lightblue;
+    height: 250px;    
+}
+
+.subsection .title {
+    float: left;     
+}
+
+.subsection .sublink {
+    float: left;
+    list-style: none;
+    margin-left: 5px;
+    color: #aaa;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.subsection .sublink.active {
+    color: #555;
+}
+
+.subsection .subcontent {
+    display: none;
+}
