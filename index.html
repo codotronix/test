@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app>
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,8 +13,7 @@
     <link href="lib/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet"/>  
     <link href="css/animate.css" rel="stylesheet" />  
     <link href="css/style.css" rel="stylesheet" />
-    <link href="css/temp.css" rel="stylesheet" />    
-    <script src="lib/js/angular.min.js"></script>
+    <link href="css/temp.css" rel="stylesheet" />
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -25,14 +24,241 @@
   <body>
     <div class="container-fluid">
     
-       <ng-include src="'partials/header.html'"></ng-include>
+    <!-- ******************** HEADER STARTS ******************************* -->
+        <header class="col-xs-12">
+           <!-- Logo -->
+           <div id="logo" class="col-md-4"></div>
+
+           <!-- Search Bar -->
+           <div class="col-md-4 header-srch">
+             <div class="input-group">
+                 <input type="text" class="form-control" placeholder="Live Search...">
+                 <span class="input-group-btn">
+                     <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
+                 </span>
+             </div>
+           </div>
+
+          <!-- icons -->
+          <div class="col-md-4 header-icons">
+              <i class="fa fa-twitter"></i>
+              <i class="fa fa-facebook"></i>
+              <i class="fa fa-google-plus"></i>
+              <i class="fa fa-vimeo-square"></i>
+              <i class="fa fa-tumblr"></i>
+              <i class="fa fa-pinterest"></i>
+              <i class="fa fa-linkedin"></i>
+              <i class="fa fa-flickr"></i>
+          </div>
+        </header>
+    <!-- -------------------- HEADER ENDS --------------------------------- -->   
        
-       <ng-include src="'partials/rowWithCarousel.html'"></ng-include>
-       
-       <ng-include src="'partials/subcategoryRow.html'"></ng-include>
-        
-       
-        
+    
+    <!-- *************** ROW WITH CAROUSEL STARTS ************************* -->
+        <section>
+            <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5 carousel-container pad-2">    
+                 <div id="carousel-1" class="carousel slide" data-ride="carousel">
+                  <!-- Indicators -->
+                  <ol class="carousel-indicators">
+                    <li data-target="#carousel-1" data-slide-to="0" class="active"></li>
+                    <li data-target="#carousel-1" data-slide-to="1"></li>
+                    <li data-target="#carousel-1" data-slide-to="2"></li>
+                    <li data-target="#carousel-1" data-slide-to="3"></li>
+                  </ol>
+
+                  <!-- Wrapper for slides -->
+                  <div class="carousel-inner" role="listbox">
+
+                     <div class="item active">
+                      <img src="img/a.png" alt="...">
+                      <div class="carousel-caption">
+                        Everyone is so busy,
+                      </div>
+                    </div>
+
+                    <div class="item">
+                      <img src="img/b.png" alt="...">
+                      <div class="carousel-caption">
+                        I see that, so do you...
+                      </div>
+                    </div>
+
+                    <div class="item">
+                      <img src="img/c.png" alt="...">
+                      <div class="carousel-caption">
+                        Horses all have gone crazy
+                      </div>
+                    </div>
+
+                    <div class="item">
+                      <img src="img/d.png" alt="...">
+                      <div class="carousel-caption">
+                        And cows are flying too...
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Controls -->
+            <!--
+                  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                  </a>
+            -->
+                </div>
+            </div>
+
+
+            <!-- 2nd Column -->
+
+            <div class="col-xs-12 col-sm-3 col-md-4 col-lg-4 pad-side-7">
+
+                <div class="bx-card">
+                    <img src="img/t.png" alt="" />
+                    <span class="title">A great news just broke into My House</span>
+
+                    <div class="src">
+                        <i class="fa fa-header icon"></i>
+                        <span class="name">The History Channel</span>
+                    </div>                
+                </div>
+
+                <!-- repeated garbage -->
+                <div class="bx-card">
+                    <img src="img/t.png" alt="" />
+                    <span class="title">A great news just broke into My House</span>
+
+                    <div class="src">
+                        <i class="fa fa-header icon"></i>
+                        <span class="name">The History Channel</span>
+                    </div>                
+                </div>
+                <div class="bx-card">
+                    <img src="img/t.png" alt="" />
+                    <span class="title">A great news just broke into My House</span>
+
+                    <div class="src">
+                        <i class="fa fa-header icon"></i>
+                        <span class="name">The History Channel</span>
+                    </div>                
+                </div><div class="bx-card">
+                    <img src="img/t.png" alt="" />
+                    <span class="title">A great news just broke into My House</span>
+
+                    <div class="src">
+                        <i class="fa fa-header icon"></i>
+                        <span class="name">The History Channel</span>
+                    </div>                
+                </div>
+                <!-- garbage end -->
+            </div>
+
+
+            <!-- 3rd Column -->
+            <div class="col-xs-12 col-sm-3 col-md-3 no-pad">
+                <div id="showCaseImg" class="pad-2">
+                   <img id="rightShowImg" src="img/b.png" alt="" />
+                </div>    
+
+                <div class="bx-card margin-top-7">
+                    <img src="img/t.png" alt="" />
+                    <span class="title">A great news just broke into My House</span>
+
+                    <div class="src">
+                        <i class="fa fa-header icon"></i>
+                        <span class="name">The History Channel</span>
+                    </div>                
+                </div>
+
+            </div>
+        </section>
+    <!-- --------------- ROW WITH CAROUSEL ENDS --------------------------- -->
+    
+    
+    <!-- **************** ONE CATEGORY ROW STARTS ************************* -->
+        <section class="subsection">
+            <label class="title">Sports</label>
+            <ul class="sublinks">
+                <li data-content-id="sports-cricket" class="sublink active">Cricket</li>
+                <li data-content-id="sports-soccer" class="sublink">Soccer</li>
+                <li data-content-id="sports-tennis" class="sublink">Tennis</li>
+            </ul>
+            <div style="clear:both;"></div>
+                <div class="content">
+                    <div id="sports-cricket" class="subcontent animated slideInRight">
+                        
+                        <!-- 1st column -->
+                        <div class="col-xs-12 col-sm-3 col-md-3 no-pad">
+                            <div id="" class="pad-2">
+                               <img id="rightShowImg" src="img/c.png" alt="" />
+                            </div>  
+
+                            <div class="bx-card margin-top-7">
+                                <img src="img/d.png" alt="" />
+                                <span class="title">A great news just broke into My House</span>
+
+                                <div class="src">
+                                    <i class="fa fa-header icon"></i>
+                                    <span class="name">The History Channel</span>
+                                </div>                
+                            </div>
+                        </div>
+                        
+                        <!-- 2nd column -->
+                        <div class="col-xs-12 col-sm-3 col-md-3">
+                            <div class="bx-card">
+                                <img src="img/a.png" alt="" />
+                                <span class="title">A great news just broke into My House</span>
+
+                                <div class="src">
+                                    <i class="fa fa-header icon"></i>
+                                    <span class="name">The History Channel</span>
+                                </div>                
+                            </div>
+                            <div class="bx-card margin-top-7">
+                                <img src="img/a.png" alt="" />
+                                <span class="title">A great news just broke into My House</span>
+
+                                <div class="src">
+                                    <i class="fa fa-header icon"></i>
+                                    <span class="name">The History Channel</span>
+                                </div>                
+                            </div>
+                            <div class="bx-card margin-top-7">
+                                <img src="img/a.png" alt="" />
+                                <span class="title">A great news just broke into My House</span>
+
+                                <div class="src">
+                                    <i class="fa fa-header icon"></i>
+                                    <span class="name">The History Channel</span>
+                                </div>                
+                            </div>
+                            <div class="bx-card margin-top-7">
+                                <img src="img/a.png" alt="" />
+                                <span class="title">A great news just broke into My House</span>
+
+                                <div class="src">
+                                    <i class="fa fa-header icon"></i>
+                                    <span class="name">The History Channel</span>
+                                </div>                
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="sports-soccer" class="subcontent animated slideInRight">
+                        <div class="dummy1">Soccer</div><div class="dummy1">Soccer</div><div class="dummy1">Soccer</div><div class="dummy1">Soccer</div>
+                    </div>
+
+                    <div id="sports-tennis" class="subcontent animated slideInRight">
+                        <div class="dummy1">Tennis</div><div class="dummy1">Tennis</div><div class="dummy1">Tennis</div><div class="dummy1">Tennis</div>
+                    </div>
+                </div>
+        </section>
+    <!-- ---------------- ONE CATEGORY ROW ENDS --------------------------- -->
         
     </div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
