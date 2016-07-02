@@ -1,17 +1,21 @@
 body {
-    background: #dadada;
+    background: rgb(244,244,242);
+}
+
+ul {
+    padding: 0;
 }
 
 header {
     background: #000;
     padding: 30px 0 20px 0;
-    border-bottom: 15px solid #af0606;
+    border-bottom: 15px solid rgb(221,51,51);
 }
 
 .header-srch button {
-    background: red !important;
+    background: rgb(222,51,49) !important;
     color: #FFF !important;
-    border: 1px solid red !important;
+    border: 1px solid rgb(222,51,49) !important;
 }
 
 .header-icons {
@@ -45,13 +49,52 @@ header {
     margin-top:7px;
 }
 
+.subsection {
+    margin: 15px 0;
+    border-top: 1px solid #ccc;
+}
+
+.subsection .content {
+/*    border: 1px solid lightblue;*/
+    height: 250px;    
+}
+
+.subsection .title {
+    display: inline-block;
+    color: rgb(87,89,104);
+    font-weight: bold;
+}
+
+.subsection .sublinks {
+    display: inline-block;
+    margin: 7px 0;
+}
+
+.subsection .sublink {
+    display: inline-block;
+    list-style: none;
+    margin-left: 5px;
+    color: rgb(109,109,107);
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.subsection .sublink.active {
+/*    color: #555;*/
+    font-weight: bold;
+}
+
+.subsection .subcontent {
+    display: none;
+}
+
 #carousel-1 img {
     height: 313px;
 }
 
 .bx-card {
     background: #FFF;
-    padding: 2px;
+    padding: 4px;
     position: relative;
 }
 
@@ -61,7 +104,7 @@ header {
 
 .bx-card img {
     width: 100px;
-    height: 70px;
+    height: 66px;
 }
 
 .bx-card .title {
@@ -89,7 +132,32 @@ header {
     text-overflow: ellipsis;
 }
 
-#rightShowImg {
+.midBannerImg {
     width:100%;
     height:232px;
+}
+
+.footer {
+    margin: 30px 0;
+    padding: 30px 0 0 0;
+    border-top: 1px solid #ddd;
+}
+
+.footer .title {
+    display: block;
+    border-bottom: 1px solid #ddd;
+    padding: 0 0 15px 15px;
+}
+
+.footer li {
+    list-style: none;    
+    padding: 3px 20px;
+}
+
+
+/* Media Queries */
+@media (max-width: 767px) {
+    .no-pad-xs {
+        padding: 0;
+    }
 }
