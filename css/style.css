@@ -6,10 +6,23 @@ ul {
     padding: 0;
 }
 
-header {
+.all-container {
+    padding-top: 110px; 
+}
+
+.single-page-layout .all-container {
+    background: #FFF; 
+}
+
+.main-header {
     background: #000;
     padding: 30px 0 20px 0;
     border-bottom: 15px solid rgb(221,51,51);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9;
 }
 
 .header-srch button {
@@ -30,6 +43,59 @@ header {
     color: #FFF;
     font-size: 25px;
 }
+
+.breadcrumb {
+    background: #FFF;
+    margin-bottom: 0;
+}
+
+.breadcrumb>li+li:before {
+    content: "> ";
+}
+
+.single-content .tags {
+    list-style: none;
+    padding: 8px 15px;
+}
+
+.single-content .tags .tag {
+    display: inline-block;
+    border-radius: 2px;
+}
+
+.single-content .tags .tag + .tag {
+    margin-left: 3px;
+}
+
+.single-content .tags .tag a {
+    font-size: 12px;
+    color: #FFF;
+    padding: 2px 3px;
+    display: block;
+    text-decoration: none;
+}
+
+.single-content .tags .tag-tech {
+    background: skyblue;
+}
+
+.single-content .tags .tag-code-war {
+    background: red;
+}
+
+.single-content .tags .tag-prog-lang {
+    background: orange;
+}
+
+
+.single-content .main-content-area {
+    
+}
+
+.single-content .main-content-area .viewShare-info span {
+    margin-right: 5px;
+}
+
 
 .no-pad {
     padding: 0;
@@ -90,6 +156,7 @@ header {
 
 #carousel-1 img {
     height: 313px;
+    width: 488px;
 }
 
 .bx-card {
@@ -151,7 +218,7 @@ header {
 }
 
 .footer {
-    margin: 30px 0;
+    margin: 30px 0 0 0;
     padding: 30px 0 0 0;
     border-top: 1px solid #ddd;
 }
@@ -168,9 +235,34 @@ header {
 }
 
 
+.footer .copyright-row {
+    background-color: #0d0d0d;
+    color: #ccc;
+    margin-top: 30px;
+    padding: 8px 15px 0px 15px;
+}
+
+
+.footer .copyright-row li {
+    display: inline-block;
+    padding: 0 5px;
+}
+
+
 /* Media Queries */
+
+@media (min-width: 768px) {
+    .footer .copyright-row ul {
+        float: right;
+    }
+}
+
 @media (max-width: 767px) {
     .no-pad-xs {
         padding: 0;
+    }
+    
+    .footer .copyright-row {
+        text-align: center;
     }
 }
