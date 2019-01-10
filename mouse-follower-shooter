@@ -1,0 +1,114 @@
+<html>
+    <head>
+        <title>Mouse Pointer Follower</title>
+        
+        <style>
+            body {
+                overflow: hidden;
+            }
+            .stick {
+                position: absolute;
+                bottom: -5px;
+                left: 50%;
+                width: 10px;
+                height: 55px;
+                background: #ccc;
+                border-top-left-radius: 7px;
+                border-top-right-radius: 7px;
+                transform-origin: bottom center;
+            }
+            .bullet {
+                position: absolute;
+                display: none;
+                height: 10px;
+                width: 10px;
+                background: #ccc;
+                border-radius: 50%;
+            }
+        </style>
+        
+        
+    </head>
+    
+    <body>
+        
+        <div class="stick"></div>
+        <div class="bullet"></div>
+        
+        <script src="jquery-2.2.4.min.js"></script>
+        <script>
+            $(function(){
+            
+                var me;
+                var all = {};
+                all.sX = $('.stick').position().left + 5;
+                all.sY = $('.stick').position().top + 50;
+                all.rad = Math.PI / 2;
+                all.WX = $('body').width();
+                all.WY = $('body').height();
+                
+                
+                $(window).on('mousemove', function(e){
+                    me = e;
+                });
+                
+                $(window).on('click', function(e){
+                    if(!all.bulletRunning) {
+                        all.bulletRunning = true;
+                        all.bulletRad = all.rad;
+                        all.bulletR = 0;
+                        all.bulletOffsetX = 0;
+                        all.bulletOffsetY = 0;
+                        all.bulletDir = all.dir
+                        $('.bullet').show();
+                    }
+                });
+                
+                
+                function followMouse () {
+                    if (me) {
+                        all.mX = me.pageX;
+                        all.mY = me.pageY;
+                        
+                        all.rad = Math.atan( (all.sY-all.mY) / (all.sX-all.mX) );
+                        all.deg = all.rad * (180 / Math.PI);                        
+                        all.dir = (all.mX > all.sX) ? +1 : -1                        
+                        all.rotate = ((90 - Math.abs(all.deg)) % 90) * all.dir;
+                        $('.stick').css({
+                            "transform": "rotate(" +all.rotate+ "deg)"
+                        });
+                    }
+                    
+                    moveBullet();
+                    //console.log(all);
+                    setTimeout(followMouse, 1000/30);
+                }
+                
+                function moveBullet () {
+                    if(!all.bulletRunning) {return;}
+                    
+                    all.bulletR += 10;
+                    
+                    all.bulletOffsetX = all.bulletR * Math.cos(all.bulletRad);
+                    all.bulletOffsetY = all.bulletR * Math.sin(all.bulletRad);
+                    
+                    all.bulletX = all.sX + (all.bulletOffsetX * all.bulletDir) - 5; //-5 due to ball width centering
+                    all.bulletY = all.sY - Math.abs(all.bulletOffsetY);
+                    
+                    $('.bullet').css({
+                        'left': all.bulletX,
+                        'top': all.bulletY
+                    });
+
+                    if(all.bulletX < 0 || all.bulletY < 0 || all.bulletX > all.WX) {
+                        all.bulletRunning = false;
+                        $('.bullet').hide();
+                    }
+                }
+                
+                followMouse();
+                
+            });
+        </script>
+    </body>
+</html>
