@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Jura:wght@400;700&display=swap');
+
+:root {
+    --theme-color: #2979ff;
+}
+body {
+    font-family: 'Jura', sans-serif;
+}
+.banner {
+    height: 441px;
+    overflow: hidden;
+    color: #fff;
+    text-align: center;
+    padding: 15px;
+    background: var(--theme-color);
+}
+.banner .ppnccontainer {
+    position: relative;
+    margin: 60px auto;
+    display: inline-block;
+    opacity: 0;
+    animation: appear 3s ease 0s;
+    animation-fill-mode: forwards;
+}
+.banner .ppnccontainer .profile-pic {
+    height: 180px;
+    width: 180px;
+    background: #fff;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid #fff;
+}
+.banner .ppnccontainer .profile-pic img {
+    width: 100%;
+    display: block;
+}
+.banner .ppnccontainer .thering {
+    /* border: 1px solid yellow; */
+    position: absolute;
+    top: -40px;
+    left: -40px;
+    bottom: -40px;
+    right: -40px;
+    animation: rotate 15s linear 1500ms infinite;
+}
+.banner .ppnccontainer .thering a {
+    display: inline-block;
+    position: absolute;
+    animation: rotate 15s linear 1500ms infinite reverse;
+}
+.banner .ppnccontainer .ico {
+    font-size: 50px;
+    color: #fff;
+}
+.banner .ppnccontainer .fb {
+    left: -25px;
+    top: 105px;
+}
+.banner .ppnccontainer .tw {
+    top: -25px;
+    left: 105px;
+}
+.banner .ppnccontainer .ln {
+    right: -25px;
+    top: 105px;
+}
+.banner .ppnccontainer .ico.circle {
+    height: 50px;
+    width: 50px;
+    background: #fff;
+    padding: 5px;
+    color: var(--theme-color);
+    font-size: 33px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.banner .ppnccontainer .gh {
+    left: 105px;
+    bottom: -25px;
+}
+.banner .name {
+    opacity: 0;
+    font-size: 36px;
+    animation: appear 3s ease 500ms;
+    animation-fill-mode: forwards;
+}
+.banner .whatido {
+    opacity: 0;
+    font-size: 18px;
+    animation: appear 3s ease 1200ms;
+    animation-fill-mode: forwards;
+}
+
+/**********************************
+* Media Queries
+**********************************/
+@media (max-width: 600px) {
+    .banner {
+        height: 329px;;
+    }
+    .banner .ppnccontainer {
+        transform: scale(.72);
+        transform-origin: top;
+        margin: 50px auto 0;
+    }
+    .banner .name {
+        font-size: 27px;
+        line-height: 35px;
+    }
+    .banner .whatido {
+        font-size: 17px;
+    }
+}
+/**********************************
+* Animations
+**********************************/
+@keyframes rotate {
+    0% { transform: rotateZ(0deg); }
+    100% { transform: rotateZ(-360deg); }
+}
+@keyframes appear {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
