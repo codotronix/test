@@ -7,7 +7,7 @@ body {
     font-family: 'Jura', sans-serif;
 }
 .banner {
-    height: 441px;
+    height: 423px;
     overflow: hidden;
     color: #fff;
     text-align: center;
@@ -91,7 +91,10 @@ body {
     animation: appear 3s ease 1200ms;
     animation-fill-mode: forwards;
 }
-
+.info-sec h1 {
+    font-size: 50px;
+    margin: 0;
+}
 /**********************************
 * Media Queries
 **********************************/
