@@ -95,6 +95,30 @@ body {
     font-size: 50px;
     margin: 0;
 }
+.info-sec .list-box {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+}
+.info-sec .list-box li {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    margin: 15px;
+    height: 105px;
+    width: 105px;
+    background: var(--theme-color);
+    color: #fff;
+}
+.info-sec .list-box li .ico {
+    font-size: 50px;
+}
+.info-sec .list-box li .caption {
+    margin-top: 5px;
+    font-weight: bold;
+}
 /**********************************
 * Media Queries
 **********************************/
@@ -113,6 +137,10 @@ body {
     }
     .banner .whatido {
         font-size: 17px;
+    }
+    .info-sec h1 {
+        font-size: 30px;
+        margin: 0;
     }
 }
 /**********************************
