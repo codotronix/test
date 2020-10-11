@@ -98,6 +98,10 @@ body {
     font-size: 50px;
     margin: 0;
 }
+.info-sec h2 {
+    font-size: 36px;
+    margin: 0;
+}
 .info-sec .list-box {
     list-style: none;
     display: flex;
@@ -137,6 +141,46 @@ body {
 .info-sec .list li img {
     height: 100%;
 }
+.app-n-games {
+    margin-top: 25px;
+}
+/**********************************
+* Cards Container
+**********************************/
+.cards-container {
+}
+.cards-container .inner {
+    padding: 10px;
+}
+.custom-card {
+    width: 100%;
+    /* min-width: 250px; */
+    max-width: 300px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+.custom-card img {
+    height: 120px;
+    margin: 5px auto;
+    display: block;
+    max-width: 100%;
+}
+.custom-card .title {
+    margin: 0;
+    font-size: 23px;
+    line-height: 25px;
+    padding: 5px 10px;
+}
+.custom-card .description {
+    margin: 0;
+    padding: 5px 10px;
+    height: 60px;
+    overflow: hidden;
+}
+.custom-card .button {
+    display: flex;
+    justify-content: center;
+}
 /**********************************
 * Media Queries
 **********************************/
@@ -158,7 +202,9 @@ body {
     }
     .info-sec h1 {
         font-size: 30px;
-        margin: 0;
+    }
+    .info-sec h2 {
+        font-size: 26px;
     }
     .info-sec .list li {
         height: 30px;
@@ -176,3 +222,7 @@ body {
     0% { opacity: 0; }
     100% { opacity: 1; }
 }
+/**********************************
+* OVERRIDE MATERIALIZE
+**********************************/
+/*********************************/
