@@ -35,7 +35,8 @@ body {
     display: block;
 }
 .banner .ppnccontainer .thering {
-    /* border: 1px solid yellow; */
+    border: 1px solid #fff;
+    border-radius: 50%;
     position: absolute;
     top: -40px;
     left: -40px;
@@ -51,6 +52,7 @@ body {
 .banner .ppnccontainer .ico {
     font-size: 50px;
     color: #fff;
+    background: var(--theme-color);
 }
 .banner .ppnccontainer .fb {
     left: -25px;
@@ -92,21 +94,35 @@ body {
     animation-fill-mode: forwards;
 }
 .info-sec {
-    margin-top: 35px;
+    margin-top: 27px;
 }
 .info-sec h1 {
-    font-size: 50px;
+    font-size: 40px;
     margin: 0;
+    /* background: #2979ff; */
+    /* color: #fff; */
+    border-top: 3px solid var(--theme-color);
+    border-bottom: 3px solid var(--theme-color);
+    /* border-radius: 9px; */
+    padding: 2px 10px 5px;
 }
 .info-sec h2 {
     font-size: 36px;
-    margin: 0;
+    margin: 30px 0 0 0;
+    padding-left: 10px;
+    display: flex;
+    align-items: center;
+}
+.info-sec h2 .ico {
+    color: var(--theme-color);
+    font-size: 32px;
+    margin-right: 10px;
 }
 .info-sec .list-box {
     list-style: none;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: left;
 }
 .info-sec .list-box li {
     display: flex;
@@ -199,6 +215,9 @@ body {
     }
     .banner .whatido {
         font-size: 17px;
+    }
+    .info-sec .list-box {
+        justify-content: center;
     }
     .info-sec h1 {
         font-size: 30px;
