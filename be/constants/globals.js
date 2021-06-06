@@ -1,0 +1,3 @@
+"use strict";
+module.exports.defaultImg = '/assets/img/bg/small/storytelling-4203628_640.jpg';
+//# sourceMappingURL=globals.js.map

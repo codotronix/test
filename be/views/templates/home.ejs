@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<%- include ("../partials/google-analytics.html") %>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/x-icon" href="/be-assets/favicon.ico" />
+    <link rel="icon" type="image/png" href="/be-assets/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta property="fb:app_id" content="2463898860533799" />
+    <meta property="og:url" content="reactale.com" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Reactale" />
+    <meta property="og:description"
+        content="Reactale is an online story reading and writing platform which emphasizes on dynamic story telling. Reactale gives writers tools to make their tales reactive and interactive, in a word - Alive. Reactale is what happens when literature embraces technology and comes to life. When a reader reads a Reactale (a.k.a Reactive Tale), the Reactale also reads back its reader and then reacts by magically altering itself depending on the reader's actions / decisions / sorroundings and other learnings that are made available to it about its reader. REACTALE marks the birth of a NEW ERA of story telling, in search of a new way, a very REACTIVE one, where no longer will an immersive tale ONLY ENGAGE its readers, but it will INTERACT, and most importantly, it will REACT" />
+    <!-- <meta property="og:image" content=" $domain . $imgUrl " /> -->
+    <meta property="og:image" content="/assets/img/c1/Reactale-ironman-1-640x360.png" />
+    <meta property="og:image" content="/assets/img/c1/act-react-640x360.png" />
+    <meta property="og:image" content="/assets/img/c1/customize-reactale-640x360.png" />
+    <meta property="og:image" content="/assets/img/c1/reactive-branching-640x360.png" />
+    <meta property="og:image" content="/assets/img/c1/Reacto-superman-640x360.png" />
+	<title>
+		Home | Reactale at a Glance | Reactale - Readers Act, Tales React - World's First Dynamic Story Reading / Writing Platform
+	</title>
+
+    <%- include ("../partials/LinksAndLoader.html") %>
+	<link rel="stylesheet" href="/be-assets/css/home.css" />
+	<script>
+		hideLoader()
+	</script>
+</head>
+
+<body>
+	<%- include ("../partials/header.html") %>
+	<%- include ("../partials/sidebar.html") %>
+	
+    <!-- THE BANNER -->
+	<section class="banner">
+		<section class="logo-sec">
+			<img class="logo" src="/be-assets/img/logos/reactale-logo-50h-red-on-transparent.png" alt="Reactale logo with name"/>
+			<div class="tagline">
+				<span class="t t1">Readers Act, </span>
+				<span class="t t2">Tales React</span>
+			</div>
+		</section>
+		<section class="btn-sec">
+			<a href="/gallery" class="waves-effect waves-light btn red accent-4 mr-5">
+				<i class="fas fa-book-reader mr-5"></i>Read a tale
+			</a>
+			<a href="/r/create-tale" class="waves-effect waves-light btn white color-theme">
+				<i class="fas fa-pencil-alt mr-5"></i>Write a tale
+			</a>
+		</section>
+	</section>
+
+	<div class="container">
+
+		<!-- THE INTRO TEXT -->
+		<section class="row intro-section">
+			<p class="flow-text">
+				Reactale is an unique and one of its kind <b>story writing and reading</b> platform which emphasizes on <b>dynamic story telling</b>.
+			</p>
+			<p class="flow-text">
+				Let's explore the idea a bit more:
+			</p>
+		</section>
+
+
+		<!-- READERS ACT - TALES REACT -->
+		<section class="row feature-section">
+			<div class="col s12"><h1>Reactive Tales</h1></div>
+			<div class="col m12 l6 push-l6 minified-html-animation">
+				<!-- MINIFIED ANIMATION -->
+				<%- include ("../partials/home/act-react-face.html") %>
+				<span class="caption">When a reader reads a reactale, the reactale also reads back its reader and tries to interact.</span>
+			</div>
+			<div class="col m12 l6 pull-l6">
+				<p class="flow-text">A tale should be reactive in nature, i.e. it should alter itself in meaningful ways by responding / reacting to readers' actions or surroundings (e.g. Is it evening? Is it a winter? What is the location? Is it known to be haunted? <i class="far fa-surprise"></i> etc). So, a Reactale (or Reactive Tale) is a tale which refuses to stay the same and dead as it was when created, but rather it aspires to be alive, to interact and to transform.</p>
+			</div>
+		</section>
+
+
+		<!-- REACTIVE BRANCHING - Parallel Possibilities -->
+		<section class="row feature-section">
+			<div class="col s12"><h1>Parallel Possibilities</h1></div>
+			<div class="col m12 l6 minified-html-animation">
+				<!-- MINIFIED ANIMATION -->
+				<%- include ("../partials/home/talesflow-animation.html") %>
+				<span class="caption">TalesFlow showing a story broken into smaller <i>Storylets</i> which can then be traversed via <i>Choices</i></span>
+			</div>
+			<div class="col m12 l6">
+				<p class="flow-text">Every story starts the same i.e. flat, one flow. Then as we read, we think, hey! why did he do that? What would have happened if she had done something else. And Bingo! we create a branch of our own in mind. Reactale encourages authors to explore those alternate flows. Readers will initially see only one storylet (fraction of the story), followed by some choices. And depending on the choice he selects, will then unlock the next storylet and so on.</p>
+			</div>
+		</section>
+
+
+		<!-- CUSTOMIZE AND GIFT -->
+		<section class="row feature-section">
+			<div class="col s12"><h1>Customize and Gift</h1></div>
+			<div class="col m12 l6 push-l6 minified-html-animation">
+				<!-- MINIFIED ANIMATION -->
+				<%- include ("../partials/home/gift-a-tale-animation.html") %>
+			</div>
+			<div class="col m12 l6 pull-l6">
+				<p class="flow-text">Wouldn't it be wonderful to become the hero of your favourite tale? Or atleast be a part of it? Now, that's possible with Reactale. Writers can put some placeholders (with default values) in their tales, which can later be modified by the reader. And what's beautiful is that the reader can then gift that modified tale to anyone, just by sharing the generated url. Just think how excited a child will be when you share a story where her favourite hero visits her home on her birthday (yeah, the exact name, place and date you entered while customizing, remember?)</p>
+			</div>
+		</section>
+
+
+		<!-- MISCELLANEOUS SECTION -->
+		<section class="feature-section misc-sec">
+			<div class="row">
+				<div class="col s12"><h1>Wait, There's more ...</h1></div>
+				<div class="col s12 l4 square-card">
+					<a class="inner" target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/playlist?list=PLyAT4IY5YIRv8CFgeNn7duuamC7PEUUXW">
+						<!-- <i class="fab fa-youtube ico"></i> -->
+						<img src="/be-assets/img/misc/reactaletv-75h-2.png" alt="ReactaleTV Logo" />
+						<span class="title">Tutorials</span>
+						<span class="info">Feeling lost? Uncertain about something, like, how to write a Reactale? Need to check how to apply a cool Reacto trick? Don't worry. It's easy. Check out these video tutorials on youtube channel named <b>ReactaleTV</b>.</span>
+					</a>
+				</div>
+				<div class="col s12 l4 square-card">
+					<a class="inner" rel="noopener noreferrer">
+						<!-- <i class="fas fa-trophy ico"></i> -->
+						<img src="/be-assets/img/misc/reactale-trophy-75h-2.png" alt="Reactale Competitions" />
+						<span class="title">Competitions</span>
+						<span class="info">We have competitions from time to time (atleast twice a year), where you can participate and win lots of exciting prizes. Just keep an eye on the notifications (bell icon at the top) and our social media pages.</span>
+					</a>
+				</div>
+				<div class="col s12 l4 square-card">
+					<a class="inner" target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/groups/420744889145209">
+						<!-- <i class="fas fa-users ico"></i> -->
+						<img src="/be-assets/img/misc/Reactale-Community-75h-2.png" alt="Reactale Community" />
+						<span class="title">Community</span>
+						<span class="info">Still have questions? doubts? Found a bug that you want to report? Want to disuss the tale you are reading or a plot you are thinking to write? Don't hesitate. Join our vibrant community. We all are wating for you.</span>
+					</a>
+				</div>
+			</div>
+		</section>
+	</div>
+
+	<%- include("../partials/footer.html"); %>
+
+	<script src="/assets/js/jquery-3.4.1.min.js"></script>
+	<script src="/be-assets/js/materialize.min.js"></script>
+    <script src="/be-assets/js/be.js"></script>
+	<script>
+		(function(){
+			$(document).on('scroll', function(){
+				// console.log($(document).scrollTop())
+				if($(document).scrollTop() > 65) {
+					$('.headerbar .logo').css({
+						opacity: 1,
+						transform: "translateY(0px)"
+					})
+				}
+				else {
+					$('.headerbar .logo').css({
+						opacity: 0,
+						transform: "translateY(-60px)"
+					})
+				}
+			})
+		})()
+	</script>
+</body>
+
+</html>
+

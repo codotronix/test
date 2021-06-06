@@ -1,0 +1,84 @@
+/**
+* FOE BOTH FE & BE
+**/
+@import url('https://fonts.googleapis.com/css?family=Exo:400,700&display=swap');
+:root {
+    --primary-color: #d50000;
+    --primary-color-dark: #950000;
+    --primary-color-light: #dd3333;
+    --secondary-color: #ff3d00;
+    --secondary-color-dark: #b22a00;
+    --secondary-color-light: #ff6333;
+    --nightmode-font: #eee;
+    --nightmode-bg: rgba(255, 255, 255, .2)
+}
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+html {
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+}
+body {
+    font-size: 16px;
+    font-family: 'Exo', sans-serif;
+    /*padding: 10px;*/
+}
+.hidden, .hide {
+  display: none !important;
+}
+.dev-mode .reactive-timeline .component-box .idchip {
+  display: inline-flex;
+}
+/**********************************************
+* Custom Scrollbar
+**********************************************/
+  /* width */
+  ::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #d50000; 
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #950000; 
+  }
+/********************************************/
+
+/********************************************************
+* NIGHT MODE
+********************************************************/
+.night-mode {
+    background: #000;
+    color: var(--nightmode-font);
+}
+.night-mode .nmw {
+    color: var(--nightmode-font) !important;
+}
+.night-mode .nmbg {
+    background: var(--nightmode-bg) !important;
+}
+.night-mode .reactive-timeline .name-label,
+.night-mode .collapsible-header {
+    background: #000;
+}
+.night-mode .modal-content {
+    background: #222;
+}
+/*******************************************************/
