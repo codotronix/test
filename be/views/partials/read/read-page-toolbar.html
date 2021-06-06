@@ -1,0 +1,129 @@
+<style>
+    #rptlbr {
+        position: fixed;
+        top: 30%;
+        right: 0;
+        color: var(--primary-color-light);
+        font-size: 18px;
+        background: rgb(255 255 255 / 3%);
+        cursor: default;
+        user-select: none;
+    }
+    #rptlbr .more {
+        color: #fff;
+        background: var(--primary-color);
+        width: 40px;
+        height: 23px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: .5;
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+        margin-bottom: 5px;
+        box-shadow: -3px 3px 5px 0px #847676;
+    }
+    #rptlbr .tools {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-height: 200px;
+        overflow: hidden;
+        transition: max-height 300ms ease;
+        background: var(--primary-color);
+        color: #fff;
+        box-shadow: -3px 3px 5px 0px #847676;
+    }
+    #rptlbr .tools.closed {
+        max-height: 0;
+    }
+    #rptlbr .tools li {
+        height: 35px;
+        width: 40px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin: 0 0 3px;
+        font-weight: bold;
+        padding: 6px 0 0 10px;
+    }
+    #rptlbr .tools li + li {
+        margin-top: 4px;
+        border-top: 1px solid #000;
+    }
+    #rptlbr .tools li:last-child {
+        height: 37px;
+    }
+    /*********************************************************************************
+    * FONT-SIZE-STYLES
+    *********************************************************************************/
+    [data-fontsize="10"] .st-text, [data-fontsize="10"] .c-text { font-size: 10px; }
+    [data-fontsize="12"] .st-text, [data-fontsize="12"] .c-text { font-size: 12px; }
+    [data-fontsize="14"] .st-text, [data-fontsize="14"] .c-text { font-size: 14px; }
+    [data-fontsize="16"] .st-text, [data-fontsize="16"] .c-text { font-size: 16px; }
+    [data-fontsize="18"] .st-text, [data-fontsize="18"] .c-text { font-size: 18px; }
+    [data-fontsize="20"] .st-text, [data-fontsize="20"] .c-text { font-size: 20px; }
+    [data-fontsize="22"] .st-text, [data-fontsize="22"] .c-text { font-size: 22px; }
+    [data-fontsize="24"] .st-text, [data-fontsize="24"] .c-text { font-size: 24px; }
+    /********************************************************************************/
+</style>
+<div id="rptlbr">
+    <div class="more"><i class="fas fa-ellipsis-h"></i></div>
+    <ul class="tools closed">
+        <!-- <li title="Mark favourite" data-btn="mark-fav"><i class="far fa-heart"></i></li> -->
+        <li title="Toggle night mode" data-btn="night-mode"><i class="fas fa-adjust"></i></li>
+        <li title="Font size increase" data-btn="font-inc"><span>A+</span></li>
+        <li title="Font size decrease" data-btn="font-dec"><span>A-</span></li>
+        <li title="Toggle developer mode" data-btn="dev-mode"><i class="fas fa-code"></i></li>
+        <!-- <li title="Mark bookmark" data-btn="bookmark"><i class="far fa-bookmark"></i></li> -->
+        
+    </ul>
+</div>
+<script>
+    $(function(){
+        // Constants
+        const LARGEST_FONT = 24
+        const SMALLEST_FONT = 10
+        const FONT_GAP = 2
+        let currentFontSize = 16    // default font size is 16px
+        // const { notify } = window
+
+        // toggle toolbar
+        $('#rptlbr .more').on('click', function(){
+            $(this).next('.tools').toggleClass('closed')
+        })
+
+        // button clicked
+        $('#rptlbr .tools li').on('click', function(){
+            const btn = $(this).attr('data-btn')
+
+            switch(btn) {
+                case 'night-mode':
+                    $('body').toggleClass('night-mode')
+                    break
+                case 'dev-mode':
+                    $('body').toggleClass('dev-mode')
+                    break
+                case 'font-inc':
+                    if(currentFontSize < LARGEST_FONT) {
+                        currentFontSize += FONT_GAP
+                        __setCurretFontSize()
+                        // notify('Font size increased')
+                    }
+                    break
+                case 'font-dec':
+                    if(currentFontSize > SMALLEST_FONT) {
+                        currentFontSize -= FONT_GAP
+                        __setCurretFontSize()
+                        // notify('Font size decreased')
+                    }
+                    break
+            }
+        })
+
+
+        function __setCurretFontSize () {
+            $('#timelineContainer').attr('data-fontsize', currentFontSize)
+        }
+    })
+</script>

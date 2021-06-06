@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include ("../partials/google-analytics.html") %>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/x-icon" href="/be-assets/favicon.ico" />
+    <link rel="icon" type="image/png" href="/be-assets/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta property="fb:app_id" content="2463898860533799" />
+    <meta property="og:url" content="reactale.com" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Reactale" />
+    <meta property="og:description"
+        content="Reactale is what happens when literature embraces technology and comes to life. When a reader reads a Reactale (a.k.a Reactive Tale), the Reactale also reads back its reader and then reacts by magically altering itself depending on the reader's actions / decisions / sorroundings and other learnings that are made available to it about its reader. REACTALE marks the birth of a NEW ERA of story telling, in search of a new way, a very REACTIVE one, where no longer will an immersive tale ONLY ENGAGE its readers, but it will INTERACT, and most importantly, it will REACT" />
+    <!-- <meta property="og:image" content=" $domain . $imgUrl " /> -->
+    <meta property="og:image" content="/assets/img/c1/Reactale-ironman-1-640x360.png" />
+    <meta property="og:image" content="/assets/img/c1/act-react-640x360.png" />
+    <meta property="og:image" content="/assets/img/c1/customize-reactale-640x360.png" />
+    <meta property="og:image" content="/assets/img/c1/reactive-branching-640x360.png" />
+    <meta property="og:image" content="/assets/img/c1/Reacto-superman-640x360.png" />
+    <title>Profile | Reactale Author <%= user && (user.firstname + ' ' + user.lastname)  %> | Reactale - Readers Act, Tales React - World's First Dynamic Story Reading / Writing Platform</title>
+    
+    <%- include ("../partials/LinksAndLoader.html") %>
+    <link rel="stylesheet" href="/be-assets/css/gallery.css" />
+    <link rel="stylesheet" href="/be-assets/css/profile.css" />
+</head>
+
+<body class="profile-page">
+    <div class="mask"></div>
+    <div id="sidebar-mask" class="mask"></div>
+
+    <%- include ("../partials/header.html") %>
+    <%- include ("../partials/sidebar.html") %>
+
+    <div class="main-container container">
+        <h1 class="page-header">Member Profile</h1>
+        <% if(!user) { %>
+            <center>
+                <b>Sorry, could not find this user ...</b>
+            </center>
+        <% } else { %>
+        
+        <div class="row">
+            <div class="col s12 m4 l3 center-align mt-15">
+                <img src="/be-assets/img/misc/blank-profile-pic.png" alt="user profile" class="profile-pic" />
+            </div>
+            <div class="col s12 m8 l9 mt-15">
+                <div class="mb-15">
+                    <div class="fullname"><%= user.firstname + ' ' + user.lastname  %></div>
+                    <div class="socialicons">
+                        <% if(user.facebookID) { %>
+                            <a href="https://facebook.com/<%= user.facebookID%>" target="_blank" noreferrer noopener>
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                        <% } %>
+                        <% if(user.twitterID) { %>
+                            <a href="https://twitter.com/<%= user.twitterID%>" target="_blank" noreferrer noopener>
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        <% } %>
+                    </div>
+                </div>
+                <hr>
+
+                <div class="mt-5">
+                    <b>About The Author</b>
+                    <p class="mt-5">
+                        <%= user.aboutme %>
+                    </p>
+                    <p class="mt-5">
+                        <% if(tales && tales.length > 0) { %>
+                            <%= user.firstname %> has written tales in  
+                            
+                                <% 
+                                    let langs = [...new Set(tales.map(t => t.info.lang))].sort();
+                                    langs.forEach((l,i) => {
+                                %>
+                                    <%= i > 0 ? (i === langs.length-1 ? ' and ' : ', ') : '' %>
+                                    <a href="/search?lang=<%= l %>" class="a-secondary">
+                                        <%= l %>
+                                    </a>
+                                <% 
+                                    }) 
+                                %>
+
+                            covering genre(s) like
+
+                                <%
+                                    let genres = [... new Set(tales.map(t => t.info.genre))].sort();
+                                    genres.forEach((g,i) => {
+                                %>
+                                    <%= i > 0 ? (i === genres.length-1 ? ' and ' : ', ') : '' %>
+                                    <a href="/search?genre=<%= g %>" class="a-secondary">
+                                        <%= g %>
+                                    </a>
+                                <% 
+                                    }) 
+                                %>
+
+                        <% } %>
+                    </p>
+                </div>
+                
+            </div>
+        </div>
+
+        <h2 class="secondary-header mt-30">Creations</h2>
+        <div class="tales-container center-align">
+            <% for(let t of tales) { %>
+            <div class="card tale-card">
+                <div class="card-image bg-cheq">
+                    <img src="<%= t.info.imgUrl %>">
+                    
+                    <a href="/read/<%= t.info.storyUrl %>" class="btn-floating halfway-fab waves-effect waves-light red go-btn">
+                        <i class="fas fa-long-arrow-alt-right"></i>
+                    </a>
+                </div>
+                <div class="card-content">
+                    <span class="card-title"><%= t.info.name %></span>
+                    <p><%= t.info.description %></p>
+                </div>
+            </div>
+            <%} %>  <!-- Cards Ending -->
+        </div>
+        
+
+
+        <!-- <div>
+            <table class="user-info-table">
+                <tr>
+                    <td>First name: </td>
+                    <td><%= user.firstname %></td>
+                </tr>
+                <tr>
+                    <td>Last name: </td>
+                    <td><%= user.lastname %></td>
+                </tr>
+            </table>
+        </div> -->
+        <% } %>
+    </div>
+
+
+    <%- include("../partials/footer.html"); %>
+
+    <script src="/assets/js/jquery-3.4.1.min.js"></script>
+    <script src="/be-assets/js/materialize.min.js"></script>
+    <script src="/be-assets/js/be.js"></script>
+
+    <!-- <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script> -->
+
+    <script>
+        hideLoader()
+    </script>
+</body>
+
+</html>
+
