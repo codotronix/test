@@ -5,7 +5,7 @@ import clsx from 'clsx'
 import { Paper, Box, Grid, Button, Typography, makeStyles } from '@material-ui/core'
 import { connect } from 'react-redux'
 import { USER_UPDATE } from '../../../redux/actionTypes'
-import { EXEC_LINK_A_TALE } from '../../../utils/urls'
+import { EXEC_LINK_A_TALE, GET_MYNOTIFS } from '../../../utils/urls'
 import { CONST_TITLE } from '../../../utils/constants'
 import { ajaxPost } from '../../../utils/ajax'
 // import { UPDATE_USERNAME, UPDATE_MYPROFILE } from '../../../utils/urls'
@@ -13,6 +13,16 @@ const { showLoader, hideLoader, notify } = window as TWindow
 
 
 const useStyles = makeStyles(theme => ({
+    headerSec: {
+        display: 'flex',
+        alignItems: 'center',
+        '& .page-title': {
+            flex: 1
+        },
+        '& button': {
+            height: 34
+        }
+    },
     notifBox: {
         marginTop: 25,
         '& .inner': {
@@ -62,13 +72,15 @@ const useStyles = makeStyles(theme => ({
 }))
 
 type TProps = {
-    user: TUser
+    user: TUser,
+    updateUser: Function
 }
 
 const Notifications = (props: TProps) => {
     const classes = useStyles()
     const [notifs, setNotifs] = useState([] as TNotif[])
-    const { user } = props 
+    const [ notifApiCallInProg, setNotifApiCallInProg ] = useState(false)
+    const { user, updateUser } = props
 
     useEffect(() => {
         document.title = 'Notifications | ' + CONST_TITLE
@@ -82,25 +94,39 @@ const Notifications = (props: TProps) => {
 
     const formatDate = (dateInMs: number) => {
         const d = new Date(dateInMs)
-        return `${(d.getDate()).toString().padStart(2, '0')}-${(d.getMonth()+1).toString().padStart(2, '0')}/${d.getFullYear()}`
+        return `${(d.getDate()).toString().padStart(2, '0')}-${(d.getMonth()+1).toString().padStart(2, '0')}-${d.getFullYear()}`
     }
 
     /**
      * 
      * @param { string } execCode 
      */
-    const executeLinkATale = (id: string, execCode: 'APPROVE' | 'DENY') => {
+    const executeLinkATale = (id: string, execCode: 'APPROVE' | 'DENY' | 'DELETE') => {
         const isConfirmed = window.confirm(`Are you sure to ${execCode} ?`)
-
+        const _id = id
         if(isConfirmed) {
             showLoader()
             ajaxPost(EXEC_LINK_A_TALE, { id, execCode })
             .then(res => {
-                const { status, msg, _id } = res.data
+                const { status, msg, id } = res.data
 
                 // if the operation is successful,
-                // the remove the id returned from the state
-                if(_id) setNotifs(notifs.filter(n => n._id !== _id))
+                // Status 2154 = Not Found, Already Deleted
+                if(status === 200 || status === 2154) {
+                    // the remove the id returned from the state
+                    // console.log('before filter')
+                    // console.log(notifs)
+                    const updatedNotifs = notifs.filter(n => n.id !== _id)
+                    // setNotifs(updatedNotifs)
+                    // console.log('after filter')
+                    // console.log(notifs)
+
+                    // Also update the user object with new notifs array
+                    updateUser({
+                        ...user,
+                        notifs: updatedNotifs
+                    })
+                }
 
                 notify(msg)
             })
@@ -110,12 +136,47 @@ const Notifications = (props: TProps) => {
         
     }
     
+    const fetchNotification = () => {
+        if(notifApiCallInProg) return
+        setNotifApiCallInProg(true)
+
+        // Call the API
+        ajaxPost(GET_MYNOTIFS, { email: user.email })
+        .then(res => {
+            const { status, notifs, msg } = res.data
+
+            // if the operation is successful,
+            if(status === 200) {
+                // Also update the user object with new notifs array
+                updateUser({
+                    ...user,
+                    notifs
+                })
+            }
+
+            notify(msg)
+        })
+        .catch(err => notify("Some error occurred ..."))
+        .finally(() => setNotifApiCallInProg(false))
+    }
 
     return (
         <Box py={2}>
-            <Typography variant="h4" component="h1">
-                Notifications
-            </Typography>
+            <div className={classes.headerSec}>
+                <Typography variant="h4" component="h1" className="page-title">
+                    Notifications
+                </Typography>
+                <Button 
+                    variant="contained" 
+                    color="primary"
+                    onClick={fetchNotification}
+                    endIcon={<i className={clsx("fas fa-sync", notifApiCallInProg && 'rotating')}></i>}
+                    size="small"
+                >
+                    Refresh
+                </Button>
+            </div>
+            
 
             <Box mt={2}>
                 Currently you have {notifs.length} notification(s)!
@@ -180,23 +241,38 @@ const Notifications = (props: TProps) => {
                                                 </li>
                                             </ul>
                                         </p>
-                                        
                                         <div className="text-right">
-                                            <Button 
-                                                variant="contained" 
-                                                color="primary"
-                                                onClick={() => executeLinkATale(notif._id, 'APPROVE')}
-                                            >
-                                                Approve
-                                            </Button>
+                                        {
+                                            // IF it is not the owner, then the Approver
+                                            user.email !== (notif as TNotifLinkATaleRequest).requestorEmail ?
+                                            <>
+                                                <Button 
+                                                    variant="contained" 
+                                                    color="primary"
+                                                    onClick={() => executeLinkATale(notif.id, 'APPROVE')}
+                                                >
+                                                    Approve
+                                                </Button>
+                                                <Button 
+                                                    variant="outlined" 
+                                                    color="primary" 
+                                                    className="ml-5"
+                                                    onClick={() => executeLinkATale(notif.id, 'DENY')}
+                                                >
+                                                    Deny
+                                                </Button>
+                                            </>
+                                            :
+                                            // Else, if it is Owner
                                             <Button 
                                                 variant="outlined" 
                                                 color="primary" 
                                                 className="ml-5"
-                                                onClick={() => executeLinkATale(notif._id, 'DENY')}
+                                                onClick={() => executeLinkATale(notif.id, 'DELETE')}
                                             >
-                                                Deny
+                                                Cancel Request
                                             </Button>
+                                        }
                                         </div>
                                     </>
                                 }

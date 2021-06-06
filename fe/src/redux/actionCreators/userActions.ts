@@ -1,12 +1,9 @@
 import { LOGIN, SIGNUP } from '../../utils/urls'
 import { USER_UPDATE, USER_PREFS_UPDATE, UI_LOGIN_MODAL_CLOSE } from '../actionTypes'
 import _ from 'lodash'
-// import axios from 'axios'
 import { ajaxPost } from '../../utils/ajax'
-// import { saveVar } from '../../utils/varStore'
-import { setToSession } from '../../services/session.service'
+import { saveLoggedInData } from '../../services/session.service'
 import { updateUserPrefs } from '../../services/user.service'
-import { CONST_SESSION_USER } from '../../utils/constants'
 import { TUser, TUserPrefs, TWindow } from '../../types'
 import { Dispatch } from 'react'
 const { notify, showLoader, hideLoader } = window as TWindow
@@ -19,7 +16,7 @@ export const actionLogin = (user: TUser) => {
             .then(res => {
                 const { status, user, tok, msg } = res.data
                 if (status === 200) {
-                    setToSession(CONST_SESSION_USER, { user, tok })
+                    saveLoggedInData(user, tok)
 
                     // update the user in redux store
                     dispatch({

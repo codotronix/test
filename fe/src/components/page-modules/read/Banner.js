@@ -72,7 +72,7 @@ const Banner = props => {
         <div>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={7}>
-                    <img src={info.imgUrl ? `/ups/banners/${info.imgUrl}` : config.defaultImg} className={classes.bannerImg} alt="Tale Banner Image" />
+                    <img src={info.imgUrl ? `${info.imgUrl}` : config.defaultImg} className={classes.bannerImg} alt="Tale Banner Image" />
                 </Grid>
                 <Grid item xs={12} md={5}>
                     <h1 className={classes.titleLine}>

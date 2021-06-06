@@ -1,15 +1,16 @@
 // const crypter = require('../utils/crypter')
 // // const User = require('../models/user')
-// const MSG = require('../constants/msg')
+const MSG = require('../constants/msg')
 // const { getDB } = require('../services/mongo')
+const { getUserByEmail, getNotifications } = require('../services/firestore.service')
 
 import { TUser } from '../types/TUser' 
+import { TNotif } from '../types/TNotification'
 
 const CONFIG = require('../../config')
 
 import { hash, createToken } from '../utils/crypter'
-import MSG from '../constants/msg'
-import { getDB } from '../services/mongo'
+// import { getDB } from '../services/mongo'
 
 const signinController = async (req: any, res: any, next: Function) => {
     let data: {email: string, pswd: string} = {...req.body}
@@ -20,9 +21,10 @@ const signinController = async (req: any, res: any, next: Function) => {
     }
 
     try {
-        const db = getDB()
+        // const db = getDB()
         // let user = await User.findOne({ email: data.email })
-        let user = await db.collection(CONFIG.usersCollection).findOne({ email: data.email }) as TUser
+        // let user = await db.collection(CONFIG.usersCollection).findOne({ email: data.email }) as TUser
+        let user = await getUserByEmail(data.email) as TUser
         if (!user) {
             res.json(MSG.SIGNIN_EMAILNOTEXIST)
             return
@@ -35,12 +37,15 @@ const signinController = async (req: any, res: any, next: Function) => {
 
         // Get all the notifications related to this user
         //
-        user.notifs = await db.collection(CONFIG.notifCollection).find({ forEmails: data.email }).toArray()
+        // user.notifs = await db.collection(CONFIG.notifCollection).find({ forEmails: data.email }).toArray()
+        user.notifs = await getNotifications('forEmails', data.email) as TNotif[]
 
-        // remove all emails
+        // secure/handle all sensitive fields, e.g. emails
         user.notifs = user.notifs.map(notif => {
             notif.forEmails = []
-            if('requestorEmail' in notif) notif.requestorEmail = ''
+            // If requestor is NOT this user himself, then only delete it.
+            // It will help in FE to show/hide action buttons conditionally
+            if('requestorEmail' in notif && notif.requestorEmail !== data.email) { notif.requestorEmail = '' }
             return notif
         })
 

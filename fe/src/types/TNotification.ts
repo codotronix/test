@@ -9,7 +9,7 @@ export enum E_NOTIF_NAME {
 }
 
 type TNotifBaseType = {
-    _id: string
+    id: string
     doC: number,
     name: E_NOTIF_NAME,
     type: E_NOTIF_TYPE,

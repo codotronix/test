@@ -15,7 +15,8 @@ const useStyles = makeStyles(theme => ({
   card: {
     maxWidth: 255,
     minWidth: 245,
-    margin: "0 auto"
+    margin: "0 auto",
+    height: '100%'
   },
   media: {
     height: 0,
@@ -84,7 +85,7 @@ const ComplexCard = props => {
       <CardMedia
         className={classes.media}
         onClick={handleReadTale}
-        image={info.imgUrl ? `/ups/banners/${info.imgUrl}`: config.defaultImg}
+        image={info.imgUrl ? info.imgUrl : config.defaultImg}
         title="Story Image"
       />
       <CardContent>

@@ -6,6 +6,7 @@ const CONFIG = require('../../config')
 const { sendVerificationMail, sendForgotPswdOTPMail } = require('../services/mail.service')
 const { OTP_TYPES } = require('../constants/enums')
 const { getNewOTP } = require('../services/otp.service')
+const { getUserByEmail, updateUser } = require('../services/firestore.service')
 
 /**
  * It's a POST API and post params must have email, otpType.
@@ -31,8 +32,9 @@ const resendOTPController = async (req, res, next) => {
     }
 
     try {
-        const db = getDB()
-        let user = await db.collection(CONFIG.usersCollection).findOne({ email })
+        // const db = getDB()
+        // let user = await db.collection(CONFIG.usersCollection).findOne({ email })
+        let user = await getUserByEmail(email)
         let isDBUpdateRequired = false
         if (!user) {
             res.json(MSG.SIGNIN_EMAILNOTEXIST)
@@ -82,10 +84,11 @@ const resendOTPController = async (req, res, next) => {
         // If any of the above code made any change in User's OTP,
         // Save it back to DB
         if(isDBUpdateRequired) {
-            db.collection(CONFIG.usersCollection).updateOne(
-                { email },
-                { $set: user }
-            )
+            // db.collection(CONFIG.usersCollection).updateOne(
+            //     { email },
+            //     { $set: user }
+            // )
+            updateUser(email, user)
         }
     }
     catch (err) {

@@ -7,6 +7,8 @@ const { sendVerificationMail } = require('../services/mail.service')
 const { OTP_TYPES } = require('../constants/enums')
 const { createUpdateUsername } = require('../services/dbService')
 
+const { getUserByEmail, setUser } = require('../services/firestore.service')
+
 const signupController = async (req, res, next) => {
     // res.send('sigining up')
     // console.log(req.body)
@@ -23,25 +25,37 @@ const signupController = async (req, res, next) => {
     }
 
     try {
-        const db = getDB()
-        const usersCollection = db.collection(CONFIG.usersCollection)
+
+        //const db = getDB()
+        //const usersCollection = db.collection(CONFIG.usersCollection)
         // let existingUser = await User.findOne({email: newUser.email})
-        let existingUser = await usersCollection.findOne({email: newUser.email})
+        //let existingUser = await usersCollection.findOne({email: newUser.email})
+
+        let existingUser = await getUserByEmail(newUser.email)
+
         if(existingUser) {
             res.json(MSG.SIGNUP_DUPLICATEEMAIL)
             return
         }
+
         newUser.pswd = crypter.hash(newUser.pswd)
         // let user = new User(newUser)
         newUser[OTP_TYPES.SIGNUP_EMAIL_VERIFICATION] = Math.floor(Math.random() * 900000 + 99999)   // a 6 digit OTP
         newUser[OTP_TYPES.SIGNUP_EMAIL_VERIFICATION] += '_' + Date.now()    // Time when OTP was created
-        await usersCollection.insertOne(newUser)
+        
+        // await usersCollection.insertOne(newUser)
+        await setUser(newUser)
 
         // Also create an username / handler for this user
         await createUpdateUsername(newUser.firstname, newUser.email)
 
         // Send Verification Mail
-        sendVerificationMail(newUser.email, newUser[OTP_TYPES.SIGNUP_EMAIL_VERIFICATION].split('_')[0], newUser.firstname)
+        try {
+            sendVerificationMail(newUser.email, newUser[OTP_TYPES.SIGNUP_EMAIL_VERIFICATION].split('_')[0], newUser.firstname)
+        }
+        catch (err) {
+            // LOG IT
+        }
 
         // let tok = crypter.createToken({ email: newUser.email })
         res.json({

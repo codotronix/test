@@ -9,10 +9,10 @@
   "scripts": {
     "test": "mocha",
     "build": "npm i && npm audit fix && cd fe && npm i && npm audit fix && npm run build && cd ..",
-    "start": "cross-env RTL_ENV=prod nodemon server.js",
-    "restart": "cd fe && npm run build && cd .. && npm run dev",
-    "dev": "cross-env RTL_ENV=local nodemon server.js",
-    "dev1": "cross-env RTL_ENV=heroWithMLab nodemon server.js"
+    "start": "nodemon server.js",
+    "restart": "cd ./fe && npm run build && cd ../ && npm run dev",
+    "dev": "cross-env ENV=dev ASSETS_ROOT=https://webapp.reactale.site URL=https://reactale.site URL_WEBAPP=https://webapp.reactale.site GCP_PROJECT_ID=reactale-dev-1 TALE_BANNER_BUCKET=rtl-dev-1-story-banner GOOGLE_APPLICATION_CREDENTIALS='./secrets/gcp/reactale-dev-1-d7ced74faa30.json' SENDGRID_KEY='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' nodemon server.js",
+    "local": "cross-env ENV=dev ASSETS_ROOT=http://localhost:5000 URL=http://localhost:9090 URL_WEBAPP=http://localhost:3000 GCP_PROJECT_ID=reactale-dev-1 TALE_BANNER_BUCKET=rtl-dev-1-story-banner GOOGLE_APPLICATION_CREDENTIALS='./secrets/gcp/reactale-dev-1-d7ced74faa30.json' SENDGRID_KEY='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' nodemon server.js"    
   },
   "repository": {
     "type": "git",
@@ -25,9 +25,12 @@
   },
   "homepage": "https://github.com/reactale/reactale-v2-be-nodejs#readme",
   "dependencies": {
+    "@google-cloud/firestore": "^4.9.8",
+    "@google-cloud/storage": "^5.8.3",
     "@sendgrid/mail": "^7.2.4",
     "bcryptjs": "^2.4.3",
     "compression": "^1.7.4",
+    "cors": "^2.8.5",
     "crypto-js": "^4.0.0",
     "ejs": "^3.1.3",
     "express": "^4.17.1",

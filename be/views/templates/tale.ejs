@@ -2,14 +2,17 @@
 <html lang="en">
 
 <head>
-    <%- include ("../partials/google-analytics.html") %>
+    <% if (process.env.ENV === 'prod') { %>
+        <%- include ("../partials/google-analytics.html") %>
+    <% } %>
+    
     <meta charset="utf-8" />
-    <link rel="icon" type="image/x-icon" href="/be-assets/favicon.ico" />
-    <link rel="icon" type="image/png" href="/be-assets/favicon.png" />
+    <link rel="icon" type="image/x-icon" href="<%= process.env.ASSETS_ROOT %>/favicon.ico" />
+    <link rel="icon" type="image/png" href="<%= process.env.ASSETS_ROOT %>/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta property="fb:app_id" content="2463898860533799" />
-    <meta property="og:url" content="https://reactale.com/read/<%= tale.info.storyUrl %>" />
+    <meta property="og:url" content="<%= process.env.URL %>/read/<%= tale.info.storyUrl %>" />
     <meta property="og:type" content="article" />
     <meta property="og:article:author" content="<%= tale.info.authorDisplayName %>" />
     <meta property="og:article:tag" content="<%= tale.info.tags %>" />
@@ -19,16 +22,16 @@
     <meta property="og:title"
         content="<%= tale.info.name %> by <%= tale.info.authorDisplayName || (author.firstname + ' ' + author.lastname) %> | Reactale" />
     <meta property="og:description" content="<%= tale.info.description %>" />
-    <meta property="og:image" content="https://reactale.com<%= tale.info.imgUrl  %>" />
-    <meta property="og:image" content="https://reactale.com<%= tale.info.imgUrlSquare  %>" />
-    <meta property="og:image" content="https://reactale.com/assets/img/c1/Reactale-ironman-1-640x360.png" />
-    <meta property="og:image" content="https://reactale.com/assets/img/c1/act-react-640x360.png" />
-    <meta property="og:image" content="https://reactale.com/assets/img/c1/customize-reactale-640x360.png" />
-    <meta property="og:image" content="https://reactale.com/assets/img/c1/reactive-branching-640x360.png" />
-    <meta property="og:image" content="https://reactale.com/assets/img/c1/Reacto-superman-640x360.png" />
+    <meta property="og:image" content="<%= tale.info.imgUrlSquare  %>" />
+    <meta property="og:image" content="<%= tale.info.imgUrl  %>" />
+    <!-- <meta property="og:image" content="<%= process.env.ASSETS_ROOT %>/assets-img/c1/Reactale-ironman-1-640x360.png" />
+    <meta property="og:image" content="<%= process.env.ASSETS_ROOT %>/assets-img/c1/act-react-640x360.png" />
+    <meta property="og:image" content="<%= process.env.ASSETS_ROOT %>/assets-img/c1/customize-reactale-640x360.png" />
+    <meta property="og:image" content="<%= process.env.ASSETS_ROOT %>/assets-img/c1/reactive-branching-640x360.png" />
+    <meta property="og:image" content="<%= process.env.ASSETS_ROOT %>/assets-img/c1/Reacto-superman-640x360.png" /> -->
 
     <!-- CSS for Reactive Timeline and Page -->
-    <link rel="stylesheet" href="/assets/css/timeline.css" />
+    <link rel="stylesheet" href="<%= process.env.ASSETS_ROOT %>/assets/css/timeline.css" />
     <title>
         Read Reactale <%= tale && tale.info && tale.info.name %> | Reactale - Readers Act, Tales React - World's First Dynamic Story Reading / Writing Platform
     </title>
@@ -51,13 +54,13 @@
                 "name": "Reactale",
                 "logo": {
                     "@type": "ImageObject",
-                    "url": "https://reactale.com/assets/img/logo/Reactale-logo-40h-red-on-transparent-bg.png"
+                    "url": "<%= process.env.URL %>/assets/img/logo/Reactale-logo-40h-red-on-transparent-bg.png"
                 }
             },
-            "url": "https://reactale.com/read/<%= tale.info.storyUrl %>",
+            "url": "<%= process.env.URL %>/read/<%= tale.info.storyUrl %>",
             "mainEntityOfPage": {
                 "@type": "WebPage",
-                "@id": "https://reactale.com/read/<%= tale.info.storyUrl %>"
+                "@id": "<%= process.env.URL %>/read/<%= tale.info.storyUrl %>"
             },
             "dateCreated": "<%= new Date(tale.info.doC) %>",
             "datePublished": "<%= new Date(tale.info.doC) %>",
@@ -66,16 +69,17 @@
         }
     </script>
 
-    <%- include ("../partials/LinksAndLoader.html") %>
-        <link rel="stylesheet" href="/be-assets/css/tale.css" />
+    <%- include ("../partials/LinksAndLoader.ejs") %>
+    <link rel="stylesheet" href="<%= process.env.ASSETS_ROOT %>/assets/be-css/tale.css" />
+    <script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=60705f130e267500127ccd0c&product=sop' async='async'></script>
 </head>
 
 <body>
     <div class="mask"></div>
     <div id="sidebar-mask" class="mask"></div>
 
-    <%- include ("../partials/header.html") %>
-        <%- include ("../partials/sidebar.html") %>
+    <%- include ("../partials/header.ejs") %>
+        <%- include ("../partials/sidebar.ejs") %>
 
             <div class="main-container container">
                 <div class="page-start-block">
@@ -123,10 +127,15 @@
                                 </div>
                             </div>
                             <div class="buttons-section">
-                                <div class="fb-like-and-share-container">
+                                <!-- <div class="fb-like-and-share-container">
                                     <div class="fb-like" data-href="https://reactale.com/read/<%= tale.info.storyUrl %>"
                                         data-width="" data-layout="button_count" data-action="like" data-size="small"
                                         data-show-faces="false" data-share="true"></div>
+                                </div> -->
+                                <div class="fb-like-and-share-container">
+                                    <div class="fb-like" data-href="<%= process.env.URL %>/read/<%= tale.info.storyUrl %>"
+                                        data-width="" data-layout="button_count" data-action="like" data-size="small"
+                                        data-show-faces="false"></div>
                                 </div>
                                 <a href="#giftatale" id="btn-show-customizemodal"
                                     class="waves-effect waves-light btn right bg-theme mt-15 modal-trigger">
@@ -134,6 +143,9 @@
                                     Customize / Gift
                                 </a>
                             </div>
+                            <!-- <div class="share-this-section mt-10">
+                                <div class="sharethis-inline-share-buttons"></div>
+                            </div> -->
                         </div>
                     </div>
                     <hr class="mt-30">
@@ -153,9 +165,30 @@
 
                 <div id="timelineContainer"></div>
 
-                <!-- DISQUS HTML START -->
-                <div id="disqus_thread"></div>
-                <!-- DISQUS HTML END -->
+                <!-- COMMENTS AREA START -->
+                <div class="row" id="reactale-comments-area">
+                    <div class="col s12">
+                      <ul class="tabs">
+                        <li class="tab col s6"><a class="active" href="#facebook-comments-tab">Facebook</a></li>
+                        <li class="tab col s6"><a href="#disqus-comments-tab">Disqus</a></li>
+                      </ul>
+                    </div>
+
+                    <div id="facebook-comments-tab" class="col s12">
+                        <!-- FB HTML START -->
+                        <div class="fb-comments" data-href="<%= process.env.URL %>/read/<%= tale.info.storyUrl %>" data-width="100%" data-numposts="10" data-lazy="true"></div>
+                        <!-- FB HTML END -->
+                    </div>
+
+                    <div id="disqus-comments-tab" class="col s12">
+                        <!-- DISQUS HTML START -->
+                        <div id="disqus_thread"></div>
+                        <!-- DISQUS HTML END -->
+                    </div>
+                </div>
+                    
+
+                <!-- COMMENTS AREA END -->
 
                 <!-- GIFT-A-TALE MODAL STARTS -->
                 <div class="modal custom-modal" id="giftatale">
@@ -275,17 +308,7 @@
                 <!-- END OF CLONABLES -->
             </div>
 
-            <%- include("../partials/footer.html"); %>
-
-                <script src="/assets/js/jquery-3.4.1.min.js"></script>
-                <script src="/be-assets/js/materialize.min.js"></script>
-                <script src="/assets/js/purify.min.js"></script>
-                <script src="/assets/js/reacto.js"></script>
-                <script src="/assets/js/timeline.js"></script>
-                <script src="/assets/js/bx-utils.js"></script>
-                <script src="/assets/js/rto-fn.js"></script>
-                <script src="/be-assets/js/be.js"></script>
-
+            <%- include("../partials/footer.ejs"); %>
                 <script>
                     (function(){
                         const tale = <%- JSON.stringify(tale) %>;
@@ -295,7 +318,7 @@
                     var exports = exports || {}
                 </script>
 
-                <script src="/be-assets/js/readtalepage.js"></script>
+                <script src="<%= process.env.ASSETS_ROOT %>/assets/be-js/readtalepage.js"></script>
 
                 <script>
                     /*
@@ -305,6 +328,7 @@
                         $('.materialboxed').materialbox();
                         $('.modal').modal();
                         $('.collapsible').collapsible();
+                        $('.tabs').tabs();
                     });
 
                     hideLoader()
@@ -312,8 +336,10 @@
 
 
                 <div id="fb-root"></div>
-                <script async defer crossorigin="anonymous"
-                    src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v4.0"></script>
+                <!-- <script async defer crossorigin="anonymous"
+                    src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v4.0"></script> -->
+
+                <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v10.0&appId=2463898860533799&autoLogAppEvents=1" nonce="KHYjlzXm"></script>
 
                 <%- include("../partials/read/read-page-toolbar.html"); %>
 </body>

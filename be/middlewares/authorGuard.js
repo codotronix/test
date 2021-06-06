@@ -10,8 +10,9 @@
  * IT MUST BE CALLED AFTER authGuard
  */
 const MSG = require('../constants/msg')
-const { getDB } = require('../services/mongo')
-const CONFIG = require('../../config')
+// const { getDB } = require('../services/mongo')
+const { getStoriesBy } = require('../services/firestore.service')
+// const CONFIG = require('../../config')
 
 const authorGuard = async (req, res, next) => {
     const storyUrl = req.params.storyUrl || req.body.storyUrl || req.fields.storyUrl // got GET and POST and FileUpload
@@ -30,8 +31,11 @@ const authorGuard = async (req, res, next) => {
 
     // Read the Story from DB
     try {
-        const db = getDB()
-        const tale = await db.collection(CONFIG.talesCollection).findOne({"info.storyUrl": storyUrl})
+        // const db = getDB()
+        // const tale = await db.collection(CONFIG.talesCollection).findOne({"info.storyUrl": storyUrl})
+        let tale = null
+        let temp = await getStoriesBy({'info.storyUrl': storyUrl}, { full: true })
+        if(temp && Array.isArray(temp) && temp.length > 0) tale = temp[0]
 
         if(!tale) {
             res.json(MSG.STORY_NOTFOUND)
@@ -39,6 +43,7 @@ const authorGuard = async (req, res, next) => {
         }
         
         if(tale.info.authorEmail !== email) {
+            // console.log('email = ', email)
             res.json(MSG.GENERIC_EMAILMISMATCH)
             return
         }

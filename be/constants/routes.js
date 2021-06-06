@@ -8,6 +8,7 @@ module.exports = {
     GET_MYSTORY: "/rtale/api/v2/getmystory/:storyUrl",
     DELETE_MYTALE: "/rtale/api/v2/deletemytale",
     GET_MYSTORIES: "/rtale/api/v2/getmystories",
+    GET_MYNOTIFS: "/rtale/api/v2/getmynotifs",
     CREATE_STORYURL: "/rtale/api/v2/uploadstorybanner",
     CREATE_TALE: "/rtale/api/v2/createstory",
     CREATE_STORYIMG: "/rtale/api/v2/createstory",

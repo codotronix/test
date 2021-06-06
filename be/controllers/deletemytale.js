@@ -10,6 +10,8 @@ const { getDB } = require('../services/mongo')
 const CONFIG = require('../../config')
 const { getStoryImgUploadDir } = require('../services/dbService')
 
+const { deleteStory } = require('../services/firestore.service')
+
 const uploadDir = getStoryImgUploadDir()
 
 const deleteMyTaleController = async (req, res, next) => {
@@ -17,8 +19,9 @@ const deleteMyTaleController = async (req, res, next) => {
     // The tale is available in req.tale
     const { tale } = req
     try {
-        const db = getDB()
-        await db.collection(CONFIG.talesCollection).deleteOne({"info.storyUrl": tale.info.storyUrl})
+        // const db = getDB()
+        // await db.collection(CONFIG.talesCollection).deleteOne({"info.storyUrl": tale.info.storyUrl})
+        await deleteStory(tale._fireID)
 
         // Don't forget to delete the image
         if(tale.info.imgUrl) {

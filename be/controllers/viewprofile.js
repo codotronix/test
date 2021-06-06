@@ -4,14 +4,16 @@ const MSG = require('../constants/msg')
 const { getDB } = require('../services/mongo')
 const { readAllStories } = require('../services/dbService')
 const CONFIG = require('../../config')
-const { defaultImg } = require('../constants/globals')
+const { defaultImg, getBannerImgRoot } = require('../constants/globals')
+const { getUserByUsername, getUserByEmail, getStoriesBy } = require('../services/firestore.service')
+
 
 const viewProfileController = async (req, res, next) => {
     let userId = req.params.userId
     let user = {}   // init user with a blank json 
 
     try {
-        const db = getDB()
+        // const db = getDB()
 
         // UserId must be atleast 5 char long
         if(!userId || userId.length < 5) {
@@ -24,19 +26,21 @@ const viewProfileController = async (req, res, next) => {
         else if(userId[0] === '@') {
             // search user db with userId
             userId = userId.substr(1)
-            user = await db.collection(CONFIG.usersCollection).findOne({ username: userId })
+            // user = await db.collection(CONFIG.usersCollection).findOne({ username: userId })
+            user = await getUserByUsername(userId)
         }
         else {
             const email = decodeURIComponent(decrypt(userId))
-            user = await db.collection(CONFIG.usersCollection).findOne({ email })
+            user = await getUserByEmail(email)
         }
 
         // Now get the stories written by this user, if any
-        const talesRes = await readAllStories(user.email)
-        let tales = []
-        if(talesRes.tales) {
-            tales = talesRes.tales.map(t => {
-                t.info.imgUrl = t.info.imgUrl ? `/ups/banners/${t.info.imgUrl}` : defaultImg
+        // const talesRes = await readAllStories(user.email)
+        let tales = await getStoriesBy({ "info.authorEmail": user.email, isPublished: true })
+        // let tales = []
+        if(tales.length > 0) {
+            tales = tales.map(t => {
+                t.info.imgUrl = t.info.imgUrl ? `${getBannerImgRoot()}/${t.info.imgUrl}` : defaultImg
                 return t
             })
         }

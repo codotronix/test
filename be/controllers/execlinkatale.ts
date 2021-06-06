@@ -4,16 +4,17 @@
 
 import { TNotifLinkATaleRequest, E_NOTIF_TYPE, E_NOTIF_NAME } from '../types/TNotification'
 import { TReactale, TStorylet, TChoice } from '../types/TReactale'
+const { getNotifById, getStoriesBy, updateStory, deleteNotification } = require('../services/firestore.service')
 
 // const crypter = require('../utils/crypter')
 // const User = require('../models/user')
-// const MSG = require('../constants/msg')
+const MSG = require('../constants/msg')
 // const { getDB } = require('../services/mongo')
 const CONFIG = require('../../config')
 
-import { getDB } from '../services/mongo'
-import MSG from '../constants/msg'
-import { ObjectID } from 'mongodb'
+// import { getDB } from '../services/mongo'
+// import MSG from '../constants/msg'
+// import { ObjectID } from 'mongodb'
 
 
 /**
@@ -40,19 +41,20 @@ const execLinkATaleController = async (req: any  , res: any, next: Function) => 
     const validExecCodes = ["APPROVE", "DENY", "DELETE"]
 
     if(!id || !execCode || !validExecCodes.includes(execCode)) {
-        res.json(MSG.SIGNIN_PARAMSMISSING)
+        res.json(MSG.GENERIC_PARAMSMISSING)
         return
     }
 
     try {
-        const db = getDB()
-        const notifCollection = db.collection(CONFIG.notifCollection)
+        // const db = getDB()
+        // const notifCollection = db.collection(CONFIG.notifCollection)
 
         // @ts-ignore
-        const objectID: any = new ObjectID.createFromHexString(id)
+        // const objectID: any = new ObjectID.createFromHexString(id)
         
         // 1st get the notification from the db using the supplied ID
-        const notif = await notifCollection.findOne({ _id: objectID }) as TNotifLinkATaleRequest
+        // const notif = await notifCollection.findOne({ _id: objectID }) as TNotifLinkATaleRequest
+        const notif = await getNotifById(id) as TNotifLinkATaleRequest
         
         if(!notif) {
             res.json(MSG.NOTIF_NOTIFNOTFOUND)
@@ -71,8 +73,11 @@ const execLinkATaleController = async (req: any  , res: any, next: Function) => 
             // Let's code
 
             // 1st get the reactale from DB
-            const talesCollection = db.collection(CONFIG.talesCollection)
-            let srcTale = await talesCollection.findOne({ "info.storyUrl": notif.fromStoryUrl }) as TReactale
+            // const talesCollection = db.collection(CONFIG.talesCollection)
+            // let srcTale = await talesCollection.findOne({ "info.storyUrl": notif.fromStoryUrl }) as TReactale
+            let srcTale = null
+            let temp = await getStoriesBy({"info.storyUrl": notif.fromStoryUrl}, { full: true })
+            if(temp && Array.isArray(temp) && temp.length > 0) srcTale = temp[0]
 
             if(!srcTale) throw 'Unable to find source tale for Link-A-Tale id = ' + id
 
@@ -102,19 +107,21 @@ const execLinkATaleController = async (req: any  , res: any, next: Function) => 
             srcTale.idCounter = idCounter
 
             // Finaly update the tale back to db
-            await talesCollection.updateOne(
-                { "info.storyUrl": srcTale.info.storyUrl },
-                { $set: srcTale }
-            )
+            // await talesCollection.updateOne(
+            //     { "info.storyUrl": srcTale.info.storyUrl },
+            //     { $set: srcTale }
+            // )
+            await updateStory(srcTale._fireID, srcTale)
         }
 
         // In any case
         // Finally Delete the Notification
-        await notifCollection.deleteOne({ _id: objectID })
+        // await notifCollection.deleteOne({ _id: objectID })
+        await deleteNotification(id)
 
         res.json( {
             ...MSG.GENERIC_SUCCESS,
-            _id: id
+            id
         })
     }
     catch (err) {

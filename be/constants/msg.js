@@ -1,6 +1,5 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = {
+module.exports = {
     GENERIC_SUCCESS: {
         status: 200,
         msg: 'Operation successful'

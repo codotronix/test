@@ -1,6 +1,6 @@
 
-module.exports.getRandomString = (len=6) => {
-    const abc = 'abcde-ABCDE-fghij-FGHIJ-klmno-KLMNO-pqrst-PQRST-uvwxy-UVWXY-zZ-1234-56789'
+module.exports.getRandomString = (len=6) => {1
+    const abc = 'abcdeABCDEfghijFGHIJklmnoKLMNOpqrstPQRSTuvwxyUVWXYzZ123456789'
     let r = ''
     for(let i=0; i<len; i++) {
         r += abc[Math.floor(Math.random() * abc.length)]

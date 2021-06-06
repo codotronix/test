@@ -61,10 +61,10 @@ const Footer = props => {
                                 <a href="https://reacto.reactale.com/">Reacto</a>
                             </li>
                             <li>
-                                <a href="https://reactale.com/rtale/privacy-policy">Privacy Policy</a>
+                                <a href="/privacy-policy.html">Privacy Policy</a>
                             </li>
                             <li>
-                                <a href="https://reactale.com/rtale/terms-and-conditions">Terms and Conditions</a>
+                                <a href="/terms.html">Terms and Conditions</a>
                             </li>
                         </ul>
                     </Box>

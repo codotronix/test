@@ -1,0 +1,15 @@
+{
+  "name": "reactale-assets-rrot",
+  "version": "1.0.0",
+  "description": "This will take care and serve ALL the static assets related to Reactale",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Suman Barick",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^5.33.2",
+    "webpack-cli": "^4.6.0"
+  }
+}

@@ -1,0 +1,45 @@
+<div class="headerbar">
+	<!-- <a href="#" data-target="sidebar" class="sidenav-trigger">
+		<i class="fas fa-bars ico-btn toggle-sidebar" id="toggle-sidebar"></i>
+	</a> -->
+	<button type="button" data-target="sidebar" class="sidenav-trigger waves-effect btn-flat">
+		<i class="fas fa-bars ico-btn toggle-sidebar" id="toggle-sidebar"></i>
+	</button>
+	
+    <div class="logo">
+    	<a href="/" class="anchor-block">
+    		<img src="<%= process.env.ASSETS_ROOT %>/assets-img/logos/Reactale-logo-50h-white-bg.png" />
+    	</a>
+	</div>
+	<div class="right-ico-btns">
+		<button id="show-uni-search" type="button" class="ico-btn waves-effect btn-flat">
+			<i class="fas fa-search"></i>
+		</button>
+		<a href="<%= process.env.URL_WEBAPP %>/r/notifications/" class="ico-btn waves-effect btn-flat">
+			<i class="fas fa-bell"></i>
+		</a>
+		<button id="profile-menu-toggler" type="button" class="ico-btn waves-effect btn-flat">
+			<i class="fas fa-user"></i>
+		</button>
+	</div>
+	
+	<div class="profile-link">
+		<a href="<%= process.env.URL_WEBAPP %>/r/my-profile" class="greet">Welcome, Guest!</a>
+	</div>
+</div>
+<div id="unisearch-container">
+	<div class="search-on">
+		<select class="select-search-field">
+			<option value="name">Name</option>
+			<option value="tags" selected>Tags</option>
+			<option value="genre">Genre</option>
+			<option value="authorDisplayName">Author</option>
+		</select>
+	</div>
+	
+	<input type="text" class="search-box" placeholder="Type here ..." />
+	<button id="go-unisearch" type="button" class="ico-btn waves-effect btn-flat"><i class="fas fa-search"></i></button>
+	<button id="hide-unisearch" type="button" class="ico-btn waves-effect btn-flat"><i class="fas fa-times"></i></button>
+</div>
+
+

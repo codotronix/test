@@ -8,12 +8,13 @@ import { TPostParamLinkATale } from '../types/TAPIParams'
 
 // const crypter = require('../utils/crypter')
 // const User = require('../models/user')
-// const MSG = require('../constants/msg')
+const MSG = require('../constants/msg')
 // const { getDB } = require('../services/mongo')
 const CONFIG = require('../../config')
+const { getUserByEmail, getNotifsBy, setNotification } = require('../services/firestore.service')
 
 import { getDB } from '../services/mongo'
-import MSG from '../constants/msg'
+// import MSG from '../constants/msg'
 import { decrypt } from '../utils/crypter'
 
 /**
@@ -43,10 +44,11 @@ const requestLinkATaleController = async (req: any  , res: any, next: Function) 
     
 
     try {
-        const db = getDB()
+        // const db = getDB()
         // First let's get the requestor's info
-        let user: TUser | null = await db.collection(CONFIG.usersCollection)
-                                    .findOne({ email: req.email })
+        // let user: TUser | null = await db.collection(CONFIG.usersCollection)
+        //                             .findOne({ email: req.email })
+        let user: TUser | null = await getUserByEmail(req.email)
 
         if (!user) {
             res.json(MSG.SIGNIN_EMAILNOTEXIST)
@@ -74,11 +76,15 @@ const requestLinkATaleController = async (req: any  , res: any, next: Function) 
         // THERE CAN BE AT MAX 5 LinkReq from a user
         // SO, Check how many this user has already made
         const MAX_REQ_PER_USER = 5
-        let existingLinkReqs = await db.collection(CONFIG.notifCollection)
-                                    .find({ requestorEmail: req.email, 
-                                            name: E_NOTIF_NAME.LINK_A_TALE_REQUEST 
-                                        })
-                                    .toArray() as TNotifLinkATaleRequest[]
+        // let existingLinkReqs = await db.collection(CONFIG.notifCollection)
+        //                             .find({ requestorEmail: req.email, 
+        //                                     name: E_NOTIF_NAME.LINK_A_TALE_REQUEST 
+        //                                 })
+        //                             .toArray() as TNotifLinkATaleRequest[]
+        let existingLinkReqs = await getNotifsBy({ 
+                                                    requestorEmail: req.email, 
+                                                    name: E_NOTIF_NAME.LINK_A_TALE_REQUEST 
+                                                }) as TNotifLinkATaleRequest[]
     
         // IF LIMIT REACHED
         if(existingLinkReqs && existingLinkReqs.length > MAX_REQ_PER_USER) {
@@ -96,7 +102,8 @@ const requestLinkATaleController = async (req: any  , res: any, next: Function) 
             }
         }
 
-        await db.collection(CONFIG.notifCollection).insertOne(newLinkReqObj)
+        // await db.collection(CONFIG.notifCollection).insertOne(newLinkReqObj)
+        await setNotification(newLinkReqObj)
         
         res.json({
             status: 200,

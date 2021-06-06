@@ -4,17 +4,13 @@
     text-align: center
 }
 .logoImg {
-  height: 45px;
+  height: 40px;
 }
-
-@media (max-width: 768px) {
-  .logoImg {
-    height: 40px;
-  }
-}
-
-@media (max-width: 420px) {
+@media (max-width: 600px) {
   .logoImg {
     height: 30px;
+  }
+  .rightBtnsHolder button {
+    padding: 0 10px 0 5px;
   }
 }

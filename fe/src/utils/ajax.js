@@ -1,16 +1,15 @@
 import axios from 'axios'
-import { getFromSession } from '../services/session.service'
+import { getLoggedInToken } from '../services/session.service'
 import { CONST_SESSION_USER } from './constants'
+const Cookies = window.Cookies || {}
 
 let tok = window.localStorage.getItem('rtltok')
-
-export const getToken = () => (getFromSession(CONST_SESSION_USER) || {})['tok']
 
 export const ajaxPost = (url, jsonData) => {
     return axios.post(url, jsonData, {
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + getToken()
+            'Authorization': 'Bearer ' + getLoggedInToken()
         }
     })
 }
@@ -19,7 +18,7 @@ export const ajaxGet = (url, params) => {
     return axios.get(url, {
         params,
         headers: {
-            'Authorization': 'Bearer ' + getToken()
+            'Authorization': 'Bearer ' + getLoggedInToken()
         }
     })
 }

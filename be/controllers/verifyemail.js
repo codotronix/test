@@ -2,6 +2,7 @@ const MSG = require('../constants/msg')
 const { getDB } = require('../services/mongo')
 const CONFIG = require('../../config')
 const { OTP_TYPES } = require('../constants/enums')
+const { getUserByEmail, updateUser } = require('../services/firestore.service')
 
 const verifyEmailController = async (req, res, next) => {
     const { email, otp } = req.body 
@@ -12,9 +13,10 @@ const verifyEmailController = async (req, res, next) => {
     }
 
     try {
-        const db = getDB()
+        // const db = getDB()
         // let user = await User.findOne({ email: data.email })
-        let user = await db.collection(CONFIG.usersCollection).findOne({ email })
+        // let user = await db.collection(CONFIG.usersCollection).findOne({ email })
+        let user = await getUserByEmail(email)
         if (!user) {
             res.json(MSG.SIGNIN_EMAILNOTEXIST)
             return
@@ -29,10 +31,11 @@ const verifyEmailController = async (req, res, next) => {
             if(actualOTP == otp) {
                 // Delete the OTP from DB
                 user[OTP_TYPES.SIGNUP_EMAIL_VERIFICATION] = ''
-                await db.collection(CONFIG.usersCollection).updateOne(
-                    { email },
-                    { $set: user }
-                )
+                // await db.collection(CONFIG.usersCollection).updateOne(
+                //     { email },
+                //     { $set: user }
+                // )
+                await updateUser(email, user)
 
                 res.json({ ...MSG.GENERIC_SUCCESS, msg: 'Verification Successful ...'})
             }

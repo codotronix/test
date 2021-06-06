@@ -10,8 +10,9 @@ const notify = window['notify']
 
 const EditTale = props => {
     const [isLocalEdit, setIsLocalEdit] = useState(false)
+    const [isFetchInProgress, setIsFetchInProgress] = useState(false)   // don't call the api 1+
 
-    const { setTaleAsWIP, _storyUrl, match, history } = props
+    const { setTaleAsWIP, _storyUrl, isFullOnlineVersionAvailable, match, history } = props
 
     useEffect(() => {
         // update title
@@ -36,12 +37,16 @@ const EditTale = props => {
 
         // Else fetch it online
         else {
-            // If we already have the data, no need to call BE
-            if(_storyUrl === storyUrl) {
+            // If we already have the full data, no need to call BE
+            if(_storyUrl === storyUrl && isFullOnlineVersionAvailable) {
                 return window.hideLoader()
             }
 
+            // Already fetch in progress?
+            if(isFetchInProgress) return
+
             // else call BE
+            setIsFetchInProgress(true)
             window.showLoader()
             ajaxGetWPathParams(GET_MYSTORY, [storyUrl])
             .then(res => {
@@ -69,7 +74,7 @@ const EditTale = props => {
         return (() => {
             console.log("Leaving Story Edit Page... Now is a good time to save changes so far...")
         })
-    }, [setTaleAsWIP, _storyUrl, match])
+    }, [setTaleAsWIP, _storyUrl, isFullOnlineVersionAvailable, match])
 
 
     return (
@@ -82,7 +87,8 @@ const EditTale = props => {
 }
 
 const mapStateToProps = state => ({
-    _storyUrl: state.wipTale.info.storyUrl
+    _storyUrl: state.wipTale.info.storyUrl,
+    isFullOnlineVersionAvailable: Boolean(state.wipTale.storylets)  // to ensure it's not a stripped down version to save bandwidth
 })
 const mapDispatchToProps = dispatch => ({
     setTaleAsWIP: tale => dispatch(actionSetTaleAsWIP(tale))

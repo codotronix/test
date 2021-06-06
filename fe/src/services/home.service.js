@@ -9,9 +9,14 @@ export const getTalesForHome = async () => {
 
     try {
         const res = await ajaxGet(ALLTALES)
-        const { status, tales, msg } = res.data
+        const { status, tales, msg, bannerImgRoot } = res.data
         if(status === 200) {
-            talesForHome = tales
+            talesForHome = tales.map(tale => {
+                if(tale.info.imgUrl) {
+                    tale.info.imgUrl = bannerImgRoot + '/' + tale.info.imgUrl
+                }
+                return tale
+            })
         }
         else {
             notify(msg)

@@ -1,0 +1,32 @@
+@import "./common.css";
+@import "./headerbar.css";
+@import "./sidebar.css";
+@import "./footer.css";
+
+.profile-pic {
+    max-width: 150px;
+}
+.profile-page .tale-card {
+    display: inline-block;
+    margin: 7px;
+}
+.profile-page .fullname {
+    font-size: 25px;
+}
+.profile-page .socialicons a {
+    background: var(--secondary-color-light);
+    color: #fff;
+    height: 32px;
+    width: 32px;
+    border-radius: 50%;
+    font-size: 19px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px 5px 0 0;
+}
+.profile-page .para-about-me {
+    white-space: pre-line;
+    max-height: 300px;
+    overflow: auto;
+}

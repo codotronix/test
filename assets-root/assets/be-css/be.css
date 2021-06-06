@@ -1,0 +1,183 @@
+
+
+
+/********************************************************
+* BX-CAROUSEL
+********************************************************/
+/* .bx-csl {
+    background: #000;
+    padding-bottom: 1px;
+}
+.bx-csl .csl-item .img-wrapper {
+    text-align: center;
+}
+.bx-csl .csl-item .img-wrapper img {
+    max-width: 100%;
+    margin: 0 auto;
+    
+}
+.bx-csl .navdots {
+    text-align: center;
+    margin-top: 5px;
+}
+.bx-csl .navdots li {
+    display: inline-block;
+    margin: 0 2px;
+    font-size: 0;
+}
+.bx-csl .navdots li button {
+    background-color: var(--primary-color);
+    color: transparent;
+    outline: none;
+    border: 0;
+    width: 18px;
+    height: 9px;
+}
+.bx-csl .navdots li.slick-active button {
+    opacity: .6;
+} */
+/******************************************************/
+
+/********************************************************
+* POPUP
+********************************************************/
+/* .popup {
+    width: calc(100vw - 200px);
+    border: 5px double var(--primary-color);
+    margin: calc(100vh / 5) auto;
+    position: relative;
+    min-width: 300px;
+    box-shadow: 0px 3px 5px -1px rgba(0,0,0,0.2), 0px 5px 8px 0px rgba(0,0,0,0.14), 0px 1px 14px 0px rgba(0,0,0,0.12);
+    background-color: #fff;
+    max-width: 600px;
+}
+.popup .header,
+.acc .header {
+    color: #fff;
+    margin: 0;
+    padding: 7px 10px;
+    font-size: 20px;
+    background-color: var(--primary-color);
+    position: relative;
+}
+.popup .header.outline,
+.acc .header.outline {
+    color: var(--primary-color);
+    border: 3px double var(--primary-color);
+    background: #fff;
+}
+.popup .header .close,
+.acc .header .ico {
+    position: absolute;
+    top: 4px;
+    right: 7px;
+    cursor: pointer;
+}
+.popup .body {
+    padding: 16px 8px;
+}
+.popup .btn-panel {
+    padding: 10px;
+    text-align: right;
+}
+.popup .btn-panel .btn + .btn {
+    margin-left: 10px;
+} */
+/******************************************************/
+
+/********************************************************
+* headerbar
+********************************************************/
+
+/*******************************************************/
+
+
+
+
+/********************************************************
+* RTL-CARD-1
+********************************************************/
+/* .rtl-card-1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 270px;
+    margin: 5px;
+    border-radius: 4px;
+    border: 1px solid rgba(213, 0, 0, 0.3);
+    color: rgba(0, 0, 0, 0.87);
+    transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    background-color: #fff;
+    box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+}
+.rtl-card-1 .header {
+    padding: 10px 15px;
+}
+.rtl-card-1 .header .title {
+    color: rgba(0, 0, 0, .8);
+}
+.rtl-card-1 .header .subtitle {
+    color: rgba(0, 0, 0, .6);
+    font-size: 14px;
+}
+.rtl-card-1 .img-container {
+    display: block;
+}
+.rtl-card-1 .img-container img {
+    max-width: 100%;
+    max-height: 138px;
+    height: 100%;
+    width: auto;
+    margin: 0 auto;
+    display: block;
+}
+.rtl-card-1 .desc {
+    padding: 10px 15px;
+    height: 90px;
+    overflow: hidden;
+    font-size: 14px;
+    color: rgba(0, 0, 0, .6);
+    text-align: justify;
+}
+.rtl-card-1 .btns {
+    margin-top: 10px;
+} */
+/*******************************************************/
+
+/**********************************************
+* Read Page CSS starts here
+**********************************************/
+
+/******** Read Page CSS starts here **********/
+
+
+/**********************************************
+* gallery Page CSS starts here
+**********************************************/
+
+
+/******** gallery Page CSS starts here **********/
+
+
+
+/********************************************************
+* SIDEBAR
+********************************************************/
+
+/*******************************************************/
+
+
+/********************************************************
+* Story Horizontal Scroller
+********************************************************/
+
+/*******************************************************/
+
+
+/********************************************************
+* Media Queries
+********************************************************/
+
+
+/*******************************************************/
+

@@ -4,13 +4,15 @@
  * 
  * This must be protected by both authGuard and authorGuard
  */
+const { getBannerImgRoot } = require('../constants/globals')
 
  const getMyStoryController = async (req, res, next) => {
     // Since it has passed both authGuard and authorGUard
     // The tale is available in req.tale
     res.json({
         status: 200,
-        tale: req.tale
+        tale: req.tale,
+        bannerImgRoot: getBannerImgRoot()
     })
  }
 

@@ -1,14 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import { makeStyles, Drawer, List, ListItem, ListItemIcon, ListItemText 
-        } from '@material-ui/core'
+import {
+  makeStyles, Drawer, List, ListItem, ListItemIcon, ListItemText
+} from '@material-ui/core'
 import { connect } from 'react-redux'
-import { UI_SIDEBAR_CLOSE, UI_LOGIN_MODAL_OPEN, USER_RESET, ONLINE_DATA_CLEAR_TALES } from '../../../redux/actionTypes'
+import { UI_SIDEBAR_CLOSE, UI_LOGIN_MODAL_OPEN, UI_LOGOUT_MODAL_OPEN, UI_LOGOUT_MODAL_CLOSE,
+  USER_RESET, ONLINE_DATA_CLEAR_TALES } from '../../../redux/actionTypes'
 // import { actionLogout } from '../../../redux/actionCreators/userActions'
 import { actionSaveTaleAndReset } from '../../../redux/actionCreators/createTaleActions'
-import { env } from '../../../utils/urls'
-import { clearSession } from '../../../services/session.service'
+import { getRoot } from '../../../utils/urls'
+import { delAllLoggedInData } from '../../../services/session.service'
 import LogOutModal from '../../common/modal/LogOutModal'
+const Cookies = window.Cookies || {}
 
 const useStyles = makeStyles(theme => ({
   list: {
@@ -27,7 +30,7 @@ const useStyles = makeStyles(theme => ({
   },
   icoInList: {
     minWidth: 30,
-    
+
   },
   ico: {
     fontSize: 30
@@ -78,9 +81,8 @@ const navs = [
 
 const Sidebard = props => {
   const classes = useStyles()
-  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false)
-  const { openLoginModal, user, resetWIPTale, resetUser, 
-    resetFetchedTales, purgePersistedData } = props
+  const { openLoginModal, user, resetWIPTale, resetUser,
+    resetFetchedTales, purgePersistedData, isLogoutModalOpen, openLogoutModal, closeLogoutModal } = props
 
   const history = useHistory()
 
@@ -92,9 +94,9 @@ const Sidebard = props => {
     ]
     // Check If it is in Server Rendered Pages
     if (serverSideUrls.includes(url)) {
-        e.preventDefault()
-        e.stopPropagation()
-        window.location.href = window.location.origin + url
+      e.preventDefault()
+      e.stopPropagation()
+      window.location.href = '//' + getRoot() + url
     }
     else if (url === "/create-tale") {
       // this is the best place to cleanup the current WIP tale
@@ -102,20 +104,16 @@ const Sidebard = props => {
     }
   }
 
-  const showLogoutConfirmModal = e => {
-    setIsLogoutModalOpen(true)
-  }
-
   const logOut = e => {
-    try{
-      clearSession() // delete jwtToken
+    try {
+      delAllLoggedInData()
       resetUser()   // reset the user
       resetFetchedTales()  // delete previously fetched tales
       purgePersistedData()
       history.push('/')
       window.notify("You are successfully signed out.")
     }
-    catch(err) {
+    catch (err) {
       window.notify("Some error occured while trying to sign out.")
     }
   }
@@ -131,17 +129,17 @@ const Sidebard = props => {
         {navs.map((nav, index) => (
           <Link key={nav.name} to={nav.url} className="anchor-default-none" onClick={e => beforeYouGo(e, nav.url)}>
             <ListItem button className={classes.listItem}>
-                <i className={nav.iconClass}></i>
-                <ListItemText primary={nav.name} />
+              <i className={nav.iconClass}></i>
+              <ListItemText primary={nav.name} />
             </ListItem>
           </Link>
         ))}
         {!user.email && <ListItem button className={classes.listItem} onClick={openLoginModal}>
-         <i className="fas fa-sign-in-alt ico"></i>
+          <i className="fas fa-sign-in-alt ico"></i>
           <ListItemText primary="Login" />
         </ListItem>}
 
-        {user.email && <ListItem button className={classes.listItem} onClick={showLogoutConfirmModal}>
+        {user.email && <ListItem button className={classes.listItem} onClick={openLogoutModal}>
           <ListItemIcon className={classes.icoInList}>
             {/* <nav.icon color="primary" className={classes.ico} /> */}
             <i className="fas fa-sign-in-alt ico"></i>
@@ -158,9 +156,9 @@ const Sidebard = props => {
       <Drawer open={props.isSidebarOpen} onClose={props.closeSidebar}>
         {sideList('left')}
       </Drawer>
-      <LogOutModal 
-        isOpen={isLogoutModalOpen} 
-        handleClose={() => setIsLogoutModalOpen(false)}
+      <LogOutModal
+        isOpen={isLogoutModalOpen}
+        handleClose={closeLogoutModal}
         logOut={logOut}
       />
     </div>
@@ -169,12 +167,15 @@ const Sidebard = props => {
 
 const mapStateToProps = state => ({
   isSidebarOpen: state.ui.isSidebarOpen,
+  isLogoutModalOpen: state.ui.isLogoutModalOpen,
   user: state.user
 })
 
 const mapDispatchToProps = dispatch => ({
   closeSidebar: () => dispatch({ type: UI_SIDEBAR_CLOSE }),
-  openLoginModal: () => dispatch({type: UI_LOGIN_MODAL_OPEN}),
+  openLoginModal: () => dispatch({ type: UI_LOGIN_MODAL_OPEN }),
+  openLogoutModal: () => dispatch({ type: UI_LOGOUT_MODAL_OPEN }),
+  closeLogoutModal: () => dispatch({ type: UI_LOGOUT_MODAL_CLOSE }),
   resetWIPTale: () => dispatch(actionSaveTaleAndReset()),
   resetUser: () => dispatch({ type: USER_RESET }),
   resetFetchedTales: () => dispatch({ type: ONLINE_DATA_CLEAR_TALES })

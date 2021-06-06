@@ -1,0 +1,69 @@
+<footer>
+    <div class="footer row">
+        <div class="col s12 m8 info-text">
+            <p>
+                Reactale is what happens when literature embraces technology and comes to life. When a reader reads a Reactale (a.k.a Reactive Tale), the Reactale also reads back its reader and then reacts by magically altering itself depending on the reader's actions / decisions / sorroundings and other learnings that are made available to it about its reader.
+            </p>
+            <p>
+                REACTALE marks the birth of a NEW ERA of story telling, in search of a new way, a very REACTIVE one, where no longer will an immersive tale ONLY ENGAGE its readers, but it will INTERACT, and most importantly, it will REACT...
+            </p>
+        </div>
+        <div class="col s12 m4 urls-sec">
+            <h4>Connect</h4>
+            <ul class="social-connect">
+                <li>
+                    <a href="https://www.facebook.com/reactale" target="_blank">
+                        <i class="fab fa-facebook-square ico"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://twitter.com/ReactiveTales" target="_blank">
+                        <i class="fab fa-twitter-square ico"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="mailto:hello@reactale.com" target="_blank">
+                        <i class="fas fa-envelope ico"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" onclick="alert('Android App coming soon...')">
+                        <i class="fas fa-mobile-alt ico"></i>
+                    </a>
+                </li>
+            </ul>
+
+            <h4>Links</h4>
+            <ul class="important-links">
+                <li>
+                    <a href="https://reacto.reactale.com" target="_blank">
+                        Reacto
+                    </a>
+                </li>
+                <li>
+                    <a href="<%= process.env.URL_WEBAPP %>/terms.html %>" target="_blank">
+                        Terms and conditions
+                    </a>
+                </li>
+                <li>
+                    <a href="<%= process.env.URL_WEBAPP %>/privacy-policy.html %>" target="_blank">
+                        Privacy policy
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</footer>
+<!-- <iframe style="display: none;" id="loginframe" src="<%= process.env.URL_WEBAPP %>/index.html?s=<%= Date.now() %>"></iframe> -->
+<iframe style="display: none;" id="loginframe" src="<%= process.env.URL_WEBAPP %>/index.html %>"></iframe>
+<!-- COMMON SCRIPTS -->
+<script src="<%= process.env.ASSETS_ROOT %>/assets-lib/js/jquery-3.4.1.min.js"></script>
+<script src="<%= process.env.ASSETS_ROOT %>/assets-lib/js/materialize.min.js"></script>
+<script src="<%= process.env.ASSETS_ROOT %>/assets-lib/js/slick.min.js"></script>
+<script src="<%= process.env.ASSETS_ROOT %>/assets-lib/js/purify.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+<script src="<%= process.env.ASSETS_ROOT %>/assets/js/reacto.js"></script>
+<script src="<%= process.env.ASSETS_ROOT %>/assets/js/timeline.js"></script>
+<script src="<%= process.env.ASSETS_ROOT %>/assets/js/bx-utils.js"></script>
+<script src="<%= process.env.ASSETS_ROOT %>/assets/js/rto-fn.js"></script>
+<script src="<%= process.env.ASSETS_ROOT %>/assets/be-js/be.js"></script>

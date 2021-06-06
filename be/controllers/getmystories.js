@@ -6,6 +6,8 @@
 const MSG = require('../constants/msg')
 const { getDB } = require('../services/mongo')
 const CONFIG = require('../../config')
+const { getStoriesBy } = require('../services/firestore.service')
+const { getBannerImgRoot } = require('../constants/globals')
 
 const getMyStoriesController = async (req, res, next) => {
 
@@ -17,15 +19,17 @@ const getMyStoriesController = async (req, res, next) => {
             return
         }
 
-        const db = getDB()
-        const tales = await db.collection(CONFIG.talesCollection)
-            .find({ "info.authorEmail": req.email })
-            .project({_id: 0, info: 1})
-            .toArray()
+        // const db = getDB()
+        // const tales = await db.collection(CONFIG.talesCollection)
+        //     .find({ "info.authorEmail": req.email })
+        //     .project({_id: 0, info: 1})
+        //     .toArray()
+        let tales = await getStoriesBy({'info.authorEmail': req.email})
 
         res.json({
             status: 200,
-            tales
+            tales,
+            bannerImgRoot: getBannerImgRoot()
         })
     }
     catch (err) {

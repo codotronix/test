@@ -1,4 +1,4 @@
-export default {
+module.exports = {
     GENERIC_SUCCESS: { 
         status: 200, 
         msg: 'Operation successful' 

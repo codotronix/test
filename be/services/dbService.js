@@ -8,6 +8,7 @@ const CONFIG = require('../../config')
 const {getRandomString} = require('./misc.service')
 const MSG = require('../constants/msg')
 const { refineObject } = require('./misc.service')
+const { getStoriesBy, getUserByUsername, updateUser, getUserByEmail } = require('./firestore.service')
 
 module.exports = {
     readAllStories,
@@ -20,6 +21,7 @@ module.exports = {
 }
 
 async function searchTales (queryObject) {
+    // console.log('queryObject', queryObject)
     let query = { isPublished: true }   // mandatory param
     let queryForUI = {} // To display in UI what is this result for
     let tales = []
@@ -31,15 +33,34 @@ async function searchTales (queryObject) {
         tags: 'Tags',
         authorDisplayName: 'Author'
     }
-    Object.keys(queryObject).map(k => {
-        if(Object.keys(validFields).includes(k)) {
-            let val = decodeURIComponent(queryObject[k])
-            let arrayOfValues = val.toString().split(',').map(s => s.trim())
-            query[`info.${k}`] = { "$in": arrayOfValues }
-            queryForUI[validFields[k]] = val
-            queryValid = true
-        }
-    })
+
+    // if it's a Unisearch
+    // i.e. it has "all" key
+    // if ('all' in queryObject) {
+    //     let val = decodeURIComponent(queryObject['all'])
+    //     let arrayOfValues = val.toString().split(',').map(s => s.trim())
+    //     query = {}
+    //     Object.keys(validFields).forEach(k => {
+    //         // only tags can be an array
+    //         query[`info.${k}`] = k === 'tags' ? arrayOfValues : arrayOfValues[0]
+    //     })
+    //     queryForUI['All'] = val
+    //     queryValid = true
+    // }
+
+    // else {
+        Object.keys(queryObject).map(k => {
+            if(Object.keys(validFields).includes(k)) {
+                let val = decodeURIComponent(queryObject[k])
+                let arrayOfValues = val.toString().split(',').map(s => s.trim())
+                // query[`info.${k}`] = { "$in": arrayOfValues }
+                query[`info.${k}`] = arrayOfValues
+                queryForUI[validFields[k]] = val
+                queryValid = true
+            }
+        })
+    // }
+    
 
     if(!queryValid) {
         return {
@@ -50,17 +71,18 @@ async function searchTales (queryObject) {
     }
 
     try {
-        const db = getDB()
-        // console.log("query = ", query)
-        tales = await db.collection(CONFIG.talesCollection)
-                                .find(query)
-                                .limit(1000)
-                                .project({
-                                    _id: 0,
-                                    info: 1
-                                })
-                                .toArray()
-
+        // const db = getDB()
+        // // console.log("query = ", query)
+        // tales = await db.collection(CONFIG.talesCollection)
+        //                         .find(query)
+        //                         .limit(1000)
+        //                         .project({
+        //                             _id: 0,
+        //                             info: 1
+        //                         })
+        //                         .toArray()
+        // console.log('query = ', query)
+        tales = await getStoriesBy(query)
         // console.log("tales = ", tales)
         
         return {
@@ -111,36 +133,43 @@ async function createUpdateUsername (username, email) {
     const usernameMinLen = 6
     const usernameMaxLen = 20
     try {
-        const usersCollection = getDB().collection(CONFIG.usersCollection)
+        // const usersCollection = getDB().collection(CONFIG.usersCollection)
         
-        if(!username) username = getRandomString(usernameMinLen).toLowerCase()
-        else if(username.length < usernameMinLen) username += getRandomString(usernameMinLen-username.length).toLowerCase()
+        if(!username) username = getRandomString(usernameMinLen)
+        else if(username.length < usernameMinLen) username += getRandomString(usernameMinLen-username.length)
         else if(username.length > usernameMaxLen) username = username.substr(0, usernameMaxLen)
 
-        // if not available, keep on appending 1, 2, 3, ... , n
+        // if not available, keep on += a random number
         let isDesiredUsernameFound = false
         let rand = 0
+        username = username.toLowerCase()
         let suggestedUsername = username
+
+        let usernameModifiedByCode = false  // i.e. when suggestedUsername is no longer a user suggested one
         while(!isDesiredUsernameFound) {
-            const existingUser = await usersCollection.findOne({ username: suggestedUsername })
+            // const existingUser = await usersCollection.findOne({ username: suggestedUsername })
+            const existingUser = await getUserByUsername(suggestedUsername)
 
             if(!existingUser) {
                 isDesiredUsernameFound = true
             }
-            else if(existingUser && existingUser.email === email) {
+            else if(!usernameModifiedByCode && existingUser && existingUser.email === email) {
                 return MSG.USERNAME_SAMEASNOW
             }
             else {
-                rand += Math.floor(Math.random() * 99 + 1)
+                rand += Math.floor(Math.random() * 999)
                 suggestedUsername = username + '-' + rand
+                usernameModifiedByCode = true
             }
         }
 
         // Update the username
-        await usersCollection.updateOne(
-            { email },
-            { $set: { username: suggestedUsername } }
-        )
+        // await usersCollection.updateOne(
+        //     { email },
+        //     { $set: { username: suggestedUsername } }
+        // )
+
+        await updateUser(email, { username: suggestedUsername })
 
         return {
             status: 200,
@@ -219,16 +248,18 @@ async function saveUpdateMyProfile (email, user) {
     }
 
     try {
-        const usersCollection = getDB().collection(CONFIG.usersCollection)
+        // const usersCollection = getDB().collection(CONFIG.usersCollection)
 
-        const existingUser = await usersCollection.findOne({ email })
+        // const existingUser = await usersCollection.findOne({ email })
+        const existingUser = await getUserByEmail(email)
 
         if(!existingUser) {
             return MSG.MYPROFILE_USERDOESNOTEXIST
         }
         else {
             // Update the user
-            await usersCollection.updateOne({ email }, { $set: refinedUser })
+            // await usersCollection.updateOne({ email }, { $set: refinedUser })
+            await updateUser(email, refinedUser)
             return {
                 updatedUserData: refinedUser,
                 status: 200,
@@ -254,9 +285,10 @@ async function addToHistory (email, historyObj) {
     refinedObj['timestamp'] = (new Date()).getTime()
 
     try {
-        const usersCollection = getDB().collection(CONFIG.usersCollection)
+        // const usersCollection = getDB().collection(CONFIG.usersCollection)
 
-        const existingUser = await usersCollection.findOne({ email })
+        // const existingUser = await usersCollection.findOne({ email })
+        const existingUser = await getUserByEmail(email)
 
         // This scenario should never occur
         if(!existingUser) {
@@ -277,7 +309,8 @@ async function addToHistory (email, historyObj) {
                 if(history.length > limit) {
                     history = history.slice(history.length-limit)
                 }
-                await usersCollection.updateOne({ email }, { $set: { history } })
+                // await usersCollection.updateOne({ email }, { $set: { history } })
+                await updateUser(email, { history })
             }
             
             return {
@@ -311,11 +344,13 @@ async function updateMyPrefs (email, partialPrefs) {
     partialPrefs = refineObject(partialPrefs, validKeys)
 
     try {
-        const usersCollection = getDB().collection(CONFIG.usersCollection)
-        const existingUser = await usersCollection.findOne({ email })
+        // const usersCollection = getDB().collection(CONFIG.usersCollection)
+        // const existingUser = await usersCollection.findOne({ email })
+        const existingUser = await getUserByEmail(email)
         let prefs = existingUser.prefs || {}
         prefs = { ...prefs, ...partialPrefs }   // update only the newer prefs
-        await usersCollection.updateOne({ email }, { $set: { prefs } })
+        // await usersCollection.updateOne({ email }, { $set: { prefs } })
+        await updateUser(email, { prefs })
             
         return {
             prefs,

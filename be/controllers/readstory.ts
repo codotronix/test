@@ -1,8 +1,11 @@
 // const { getDB } = require('../services/mongo')
-const CONFIG = require('../../config')
+// const CONFIG = require('../../config')
+const { getStoriesBy, getUserByEmail } = require('../services/firestore.service')
+const { getBannerImgRoot } = require('../constants/globals')
+
 // const { encrypt } = require('../utils/crypter')
 
-import { getDB } from '../services/mongo'
+// import { getDB } from '../services/mongo'
 import { encrypt } from '../utils/crypter'
 import { TReactale } from '../types/TReactale'
 import { TUser } from '../types/TUser'
@@ -13,8 +16,12 @@ const readStoryController = async (req: any, res: any, next: Function) => {
 
         if(!storyUrl) throw 'Sorry, we could not find this tale ... :('
 
-        const db = getDB()
-        const tale = await db.collection(CONFIG.talesCollection).findOne({"info.storyUrl": storyUrl}) as TReactale
+        // const db = getDB()
+        // const tale = await db.collection(CONFIG.talesCollection).findOne({"info.storyUrl": storyUrl}) as TReactale
+
+        let tale = null
+        let temp = await getStoriesBy({'info.storyUrl': storyUrl}, { full: true }) as TReactale[]
+        if(temp && Array.isArray(temp) && temp.length > 0) tale = temp[0]
 
         if(!tale) throw 'Sorry, we could not find this tale ... :('
 
@@ -26,10 +33,11 @@ const readStoryController = async (req: any, res: any, next: Function) => {
 
         // Get the userId
         // So that clicking on the author's name can redirect to profile
-        let author = await db.collection(CONFIG.usersCollection).findOne({ email: tale.info.authorEmail }) as TUser
+        // let author = await db.collection(CONFIG.usersCollection).findOne({ email: tale.info.authorEmail }) as TUser
+        let author = await getUserByEmail(tale.info.authorEmail) as TUser
         author.username = author.username ? ('@'+ author.username) : encodeURIComponent(encrypt(author.email))
 
-        tale.info.imgUrl = tale.info.imgUrl ? `/ups/banners/${tale.info.imgUrl}` : '/assets/img/bg/small/storytelling-4203628_640.jpg'
+        tale.info.imgUrl = tale.info.imgUrl ? `${getBannerImgRoot()}/${tale.info.imgUrl}` : '/assets/img/bg/small/storytelling-4203628_640.jpg'
 
         // For WhatsApp Square 300 Image
         const EXT = '.webp'

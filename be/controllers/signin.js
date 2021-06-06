@@ -8,36 +8,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
+const MSG = require('../constants/msg');
+const { getUserByEmail, getNotifications } = require('../services/firestore.service');
 const CONFIG = require('../../config');
 const crypter_1 = require("../utils/crypter");
-const msg_1 = __importDefault(require("../constants/msg"));
-const mongo_1 = require("../services/mongo");
 const signinController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     let data = Object.assign({}, req.body);
     if (!data.email || !data.pswd) {
-        res.json(msg_1.default.SIGNIN_PARAMSMISSING);
+        res.json(MSG.SIGNIN_PARAMSMISSING);
         return;
     }
     try {
-        const db = mongo_1.getDB();
-        let user = yield db.collection(CONFIG.usersCollection).findOne({ email: data.email });
+        let user = yield getUserByEmail(data.email);
         if (!user) {
-            res.json(msg_1.default.SIGNIN_EMAILNOTEXIST);
+            res.json(MSG.SIGNIN_EMAILNOTEXIST);
             return;
         }
         if (crypter_1.hash(data.pswd) !== user.pswd) {
-            res.json(msg_1.default.SIGNIN_IDPSWDMISMATCH);
+            res.json(MSG.SIGNIN_IDPSWDMISMATCH);
             return;
         }
-        user.notifs = yield db.collection(CONFIG.notifCollection).find({ forEmails: data.email }).toArray();
+        user.notifs = (yield getNotifications('forEmails', data.email));
         user.notifs = user.notifs.map(notif => {
             notif.forEmails = [];
-            if ('requestorEmail' in notif)
+            if ('requestorEmail' in notif && notif.requestorEmail !== data.email) {
                 notif.requestorEmail = '';
+            }
             return notif;
         });
         user.pswd = user._id = '';
@@ -50,7 +47,7 @@ const signinController = (req, res, next) => __awaiter(void 0, void 0, void 0, f
     }
     catch (err) {
         console.log(err);
-        res.json(msg_1.default.GENERIC_FAILURE);
+        res.json(MSG.GENERIC_FAILURE);
     }
 });
 module.exports = signinController;

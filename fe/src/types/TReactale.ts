@@ -1,4 +1,5 @@
 export type TReactale = {
+    _fireID: string     // Firebase ID
     id: string         // Local id, to avoid offline tales naming clash
     idCounter: number  // For internal use (id tracking)
     start: string

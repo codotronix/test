@@ -8,37 +8,32 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
+const { getNotifById, getStoriesBy, updateStory, deleteNotification } = require('../services/firestore.service');
+const MSG = require('../constants/msg');
 const CONFIG = require('../../config');
-const mongo_1 = require("../services/mongo");
-const msg_1 = __importDefault(require("../constants/msg"));
-const mongodb_1 = require("mongodb");
 const execLinkATaleController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { id, execCode } = req.body;
     const validExecCodes = ["APPROVE", "DENY", "DELETE"];
     if (!id || !execCode || !validExecCodes.includes(execCode)) {
-        res.json(msg_1.default.SIGNIN_PARAMSMISSING);
+        res.json(MSG.GENERIC_PARAMSMISSING);
         return;
     }
     try {
-        const db = mongo_1.getDB();
-        const notifCollection = db.collection(CONFIG.notifCollection);
-        const objectID = new mongodb_1.ObjectID.createFromHexString(id);
-        const notif = yield notifCollection.findOne({ _id: objectID });
+        const notif = yield getNotifById(id);
         if (!notif) {
-            res.json(msg_1.default.NOTIF_NOTIFNOTFOUND);
+            res.json(MSG.NOTIF_NOTIFNOTFOUND);
             return;
         }
         if (!notif.forEmails.includes(req.email)) {
-            res.json(msg_1.default.NOTIF_NOPERMISSION);
+            res.json(MSG.NOTIF_NOPERMISSION);
             return;
         }
         if (execCode === "APPROVE") {
-            const talesCollection = db.collection(CONFIG.talesCollection);
-            let srcTale = yield talesCollection.findOne({ "info.storyUrl": notif.fromStoryUrl });
+            let srcTale = null;
+            let temp = yield getStoriesBy({ "info.storyUrl": notif.fromStoryUrl }, { full: true });
+            if (temp && Array.isArray(temp) && temp.length > 0)
+                srcTale = temp[0];
             if (!srcTale)
                 throw 'Unable to find source tale for Link-A-Tale id = ' + id;
             let idCounter = srcTale.idCounter;
@@ -57,14 +52,14 @@ const execLinkATaleController = (req, res, next) => __awaiter(void 0, void 0, vo
             srcTale.storylets[newST.id] = newST;
             srcTale.choices[newChoice.id] = newChoice;
             srcTale.idCounter = idCounter;
-            yield talesCollection.updateOne({ "info.storyUrl": srcTale.info.storyUrl }, { $set: srcTale });
+            yield updateStory(srcTale._fireID, srcTale);
         }
-        yield notifCollection.deleteOne({ _id: objectID });
-        res.json(Object.assign(Object.assign({}, msg_1.default.GENERIC_SUCCESS), { _id: id }));
+        yield deleteNotification(id);
+        res.json(Object.assign(Object.assign({}, MSG.GENERIC_SUCCESS), { id }));
     }
     catch (err) {
         console.log(err);
-        res.json(msg_1.default.GENERIC_FAILURE);
+        res.json(MSG.GENERIC_FAILURE);
     }
 });
 module.exports = execLinkATaleController;

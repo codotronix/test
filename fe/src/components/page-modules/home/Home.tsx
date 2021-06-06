@@ -1,10 +1,10 @@
 import React, { Dispatch, useEffect, useState } from 'react'
 import { Box } from '@material-ui/core'
 import { connect } from 'react-redux'
-import { config } from '../../../utils/urls'
+import { config, getRoot } from '../../../utils/urls'
 import { getTalesForHome } from '../../../services/home.service'
 import { ComplexCard } from '../../common/cards'
-import { UI_LOGIN_MODAL_OPEN } from '../../../redux/actionTypes'
+import { UI_LOGIN_MODAL_OPEN, UI_LOGOUT_MODAL_OPEN } from '../../../redux/actionTypes'
 import { TReactale, TGroupRtlByGenre, TUser, TWindow } from '../../../types'
 import { RouteComponentProps } from 'react-router-dom'
 import { CONST_TITLE } from '../../../utils/constants'
@@ -12,20 +12,22 @@ import { CONST_TITLE } from '../../../utils/constants'
 const { showLoader, hideLoader }  = window as TWindow
 
 type HomeProps = RouteComponentProps & {
-    openLoginModal: Function;
+    openLoginModal: Function
     user: TUser
+    openLogoutModal: Function
 }
 
 const Home: React.FC<HomeProps> = (props: HomeProps) => {
     // const [tales, setTales] = useState([])
     const [groups, setGroups] = useState({} as TGroupRtlByGenre)
-    const { history, location, openLoginModal, user } = props
+    const { history, location, openLoginModal, user, openLogoutModal } = props
 
     // Update the Page Title    
     useEffect(() => {
         document.title = 'Home | ' + CONST_TITLE
     }, [])
-    
+
+    // get data for home page
     useEffect(() => {
         showLoader()
         getTalesForHome()
@@ -40,21 +42,40 @@ const Home: React.FC<HomeProps> = (props: HomeProps) => {
         })
         .catch(err => console.log(err))
         .finally(() => hideLoader())
+    }, 
+    [])
+    
 
-        // See if Login Modal needs to be opened ...
+    // See if Login Modal needs to be opened ...
+    useEffect(() => {
         const params = new URLSearchParams(location.search); 
         const openLogin = params.get('openLogin')
-
-        if(openLogin === 'true') {
-            console.log('show login modal')
-            const newSearchString = location.search.replace('openLogin=true', '')
-            history.push(`${location.pathname}${newSearchString}`)
+        const openLogout = params.get('openLogout')
+        let isChanged = false
+        // Logout get higher priority
+        // Is it a logout ?
+        if(openLogout === 'true') {
+            isChanged = true
+            setTimeout(() => {
+                // Open logoutModal
+                openLogoutModal()
+            }, 300)
+        }
+        else if(openLogin === 'true') {
+            isChanged = true
             setTimeout(() => {
                 // Open autoLoginModal only if user not signed in already
                 if(!user || !user.email) openLoginModal()
             }, 300)
         }
-    }, [history, location, openLoginModal, user])
+
+        // remove all the search strings, so that it does not get executed again
+        if(isChanged) {
+            const newSearchString = location.search.replace('openLogout=true', '').replace('openLogin=true', '')
+            history.push(`${location.pathname}${newSearchString}`)
+        }
+
+    }, [])
     
 
     const goToTale = (storyUrl: string) => {
@@ -64,7 +85,7 @@ const Home: React.FC<HomeProps> = (props: HomeProps) => {
         }
         // else go to NODE View
         else {
-            let url = window.location.origin + '/read/' + storyUrl
+            let url = '//' + getRoot() + '/read/' + storyUrl
             // let url = getRoot() + '/read/' + storyUrl
             window.location.href = url
         }
@@ -111,7 +132,8 @@ const mapStateToProps = (state: { user: TUser }) => ({
     user: state.user
 })
 const mapDispatchToProps = (dispatch: Dispatch<any>)  => ({
-    openLoginModal: () => dispatch({type: UI_LOGIN_MODAL_OPEN})
+    openLoginModal: () => dispatch({type: UI_LOGIN_MODAL_OPEN}),
+    openLogoutModal: () => dispatch({ type: UI_LOGOUT_MODAL_OPEN }),
   })
   
 export default connect(mapStateToProps, mapDispatchToProps)(Home)

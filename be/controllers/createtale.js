@@ -1,16 +1,18 @@
 const crypter = require('../utils/crypter')
 const MSG = require('../constants/msg')
 // const Tale = require('../models/tale')
-const { getDB } = require('../services/mongo')
+// const { getDB } = require('../services/mongo')
+const { getStoriesBy, setNewStory, updateStory } = require('../services/firestore.service')
 const CONFIG = require('../../config')
 const { getRandomString } = require('../services/misc.service')
 
 const createTaleController = async (req, res, next) => {
     try {
         // Since it has passed authGurad, loggedIn user email can be found in req
-        //console.log('logged in user ', req.email)
+        // console.log('logged in user ', req.email)
         const tokenEmail = req.email
         const submittedTale = req.body
+        // Convert the tags into array
         if(!Array.isArray(submittedTale.info.tags)) {
             submittedTale.info.tags = submittedTale.info.tags.split(',').map(t => t.trim())
         }
@@ -27,11 +29,11 @@ const createTaleController = async (req, res, next) => {
             return
         }
 
-        const db = getDB()
-        const talesCollection = db.collection(CONFIG.talesCollection)
+        // const db = getDB()
+        // const talesCollection = db.collection(CONFIG.talesCollection)
 
         // if storyUrl is already present in the submittedTale, 
-        // then it an UPDATE
+        // then it's an UPDATE
         // In that case check 
         // IF dbTale.info.authorEmail === submittedTale.info.authorEmail
 
@@ -39,16 +41,21 @@ const createTaleController = async (req, res, next) => {
         // OR JUST A HACKER HAS PUT SOME STORYURL
         let existingTale = null
         if (submittedTale.info.storyUrl) {
-            existingTale = await talesCollection.findOne({ "info.storyUrl": submittedTale.info.storyUrl })
+            // existingTale = await talesCollection.findOne({ "info.storyUrl": submittedTale.info.storyUrl })
+            let temp = await getStoriesBy({'info.storyUrl': submittedTale.info.storyUrl})
+            if(temp && Array.isArray(temp) && temp.length > 0) existingTale = temp[0]
         }
 
         // UPDATE CASE
         if (existingTale) {
+            // Theif Guard
+            // Check if someone is trying to save other's exported tale
             if (existingTale.info.authorEmail !== submittedTale.info.authorEmail) {
                 res.json(MSG.GENERIC_EMAILMISMATCH)
             }
             else {
                 delete submittedTale._id
+                submittedTale._fireID = existingTale._fireID  // Incase if it is a exported stored tale, of ID is corrupted
                 // console.log(submittedTale)
                 try {
                     // let tale = new Tale(submittedTale)
@@ -59,10 +66,12 @@ const createTaleController = async (req, res, next) => {
                     // submittedTale.info.dateModified = (new Date()).toUTCString()
                     submittedTale.info.doM = (new Date()).getTime()
 
-                    await talesCollection.updateOne(
-                        { "info.storyUrl": submittedTale.info.storyUrl },
-                        { $set: submittedTale }
-                    )
+                    // await talesCollection.updateOne(
+                    //     { "info.storyUrl": submittedTale.info.storyUrl },
+                    //     { $set: submittedTale }
+                    // )
+
+                    await updateStory(existingTale._fireID, submittedTale)
 
                     res.json({
                         status: 200,
@@ -108,7 +117,10 @@ const createTaleController = async (req, res, next) => {
             let iterCount = 0
             let suggestedUrl = desiredUrl
             while(!isDesiredUrlFound) {
-                const existingTale = await talesCollection.findOne({ "info.storyUrl": suggestedUrl })
+                // const existingTale = await talesCollection.findOne({ "info.storyUrl": suggestedUrl })
+                let existingTale = null
+                let temp = await getStoriesBy({'info.storyUrl': suggestedUrl})
+                if(temp && Array.isArray(temp) && temp.length > 0) existingTale = temp[0]
 
                 if(!existingTale) {
                     isDesiredUrlFound = true
@@ -129,7 +141,8 @@ const createTaleController = async (req, res, next) => {
             /**
              * TADA! A NEW TALE IS BEING BORN HERE
              */
-            await talesCollection.insertOne(submittedTale)
+            // await talesCollection.insertOne(submittedTale)
+            await setNewStory(submittedTale)
 
             res.json({
                 status: 200,

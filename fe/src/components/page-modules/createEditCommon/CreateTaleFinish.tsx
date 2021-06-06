@@ -61,6 +61,7 @@ const CreateTaleFinish = (props: Props) => {
 
         let data = {
             storyUrl: tale.info.storyUrl,
+            _fireID: tale._fireID,
             isPublished: !tale.isPublished
         }
         ajaxPost(PUB_UNPUB, data)

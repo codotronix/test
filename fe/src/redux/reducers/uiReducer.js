@@ -4,6 +4,8 @@ import {
     UI_LOGIN_MODAL_OPEN,
     UI_LOGIN_MODAL_CLOSE,
     UI_LOGIN_SET_ACT_TAB,
+    UI_LOGOUT_MODAL_OPEN,
+    UI_LOGOUT_MODAL_CLOSE,
     UI_REACTO_MODAL_OPEN,
     UI_REACTO_MODAL_CLOSE
 } from '../actionTypes'
@@ -11,6 +13,7 @@ import {
 const initState = {
     isSidebarOpen: false,
     isLoginModalOpen: false,
+    isLogoutModalOpen: false,
     loginActiveTab: 0,
     isReactoModalOpen: false,
     notifications: {}
@@ -30,6 +33,12 @@ const uiReducer = (state=initState, action) => {
 
         case UI_LOGIN_MODAL_CLOSE:
             return { ...state, isLoginModalOpen: false }
+
+        case UI_LOGOUT_MODAL_OPEN:
+            return { ...state, isLogoutModalOpen: true }
+
+        case UI_LOGOUT_MODAL_CLOSE:
+            return { ...state, isLogoutModalOpen: false }
 
         case UI_REACTO_MODAL_OPEN:
             return { ...state, isReactoModalOpen: true }

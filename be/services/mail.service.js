@@ -1,7 +1,7 @@
-const CONFIG = require('../../config')
+// const CONFIG = require('../../config')
 const sgMail = require('@sendgrid/mail')
 
-sgMail.setApiKey(CONFIG.mailKey)
+sgMail.setApiKey(process.env.SENDGRID_KEY)
 
 module.exports.sendVerificationMail = (toEmail, OTP, firstname) => {
     const msg = {

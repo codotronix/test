@@ -9,24 +9,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const CONFIG = require('../../config');
-const mongo_1 = require("../services/mongo");
+const { getStoriesBy, getUserByEmail } = require('../services/firestore.service');
+const { getBannerImgRoot } = require('../constants/globals');
 const crypter_1 = require("../utils/crypter");
 const readStoryController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const storyUrl = req.params.storyUrl;
         if (!storyUrl)
             throw 'Sorry, we could not find this tale ... :(';
-        const db = mongo_1.getDB();
-        const tale = yield db.collection(CONFIG.talesCollection).findOne({ "info.storyUrl": storyUrl });
+        let tale = null;
+        let temp = yield getStoriesBy({ 'info.storyUrl': storyUrl }, { full: true });
+        if (temp && Array.isArray(temp) && temp.length > 0)
+            tale = temp[0];
         if (!tale)
             throw 'Sorry, we could not find this tale ... :(';
         if (!tale.isPublished) {
             throw 'Sorry, this tale is in unpublished state. If you know the author, please request him / her to publish it and then you can see it :)';
         }
-        let author = yield db.collection(CONFIG.usersCollection).findOne({ email: tale.info.authorEmail });
+        let author = yield getUserByEmail(tale.info.authorEmail);
         author.username = author.username ? ('@' + author.username) : encodeURIComponent(crypter_1.encrypt(author.email));
-        tale.info.imgUrl = tale.info.imgUrl ? `/ups/banners/${tale.info.imgUrl}` : '/assets/img/bg/small/storytelling-4203628_640.jpg';
+        tale.info.imgUrl = tale.info.imgUrl ? `${getBannerImgRoot()}/${tale.info.imgUrl}` : '/assets/img/bg/small/storytelling-4203628_640.jpg';
         const EXT = '.webp';
         const EXT300 = '.300x.webp';
         tale.info.imgUrlSquare = tale.info.imgUrl.substr(0, tale.info.imgUrl.length - EXT.length) + EXT300;

@@ -4,6 +4,7 @@ const MSG = require('../constants/msg')
 const { getDB } = require('../services/mongo')
 const CONFIG = require('../../config')
 const { OTP_TYPES } = require('../constants/enums')
+const { getUserByEmail, updateUser } = require('../services/firestore.service')
 
 const updatePswdController = async (req, res, next) => {
     const { email, pswdchangeotp, newpswd } = req.body
@@ -15,7 +16,8 @@ const updatePswdController = async (req, res, next) => {
     try {
         const db = getDB()
 
-        let user = await db.collection(CONFIG.usersCollection).findOne({ email })
+        // let user = await db.collection(CONFIG.usersCollection).findOne({ email })
+        let user = await getUserByEmail(email)
         if (!user) {
             res.json(MSG.SIGNIN_EMAILNOTEXIST)
             return
@@ -38,10 +40,11 @@ const updatePswdController = async (req, res, next) => {
         user[OTP_TYPES.FORGOT_PASSWORD] = ''
         user.pswd = crypter.hash(newpswd)
 
-        await db.collection(CONFIG.usersCollection).updateOne(
-            { email },
-            { $set: user }
-        )
+        // await db.collection(CONFIG.usersCollection).updateOne(
+        //     { email },
+        //     { $set: user }
+        // )
+        await updateUser(email, user)
         
         res.json({
             status: 200,

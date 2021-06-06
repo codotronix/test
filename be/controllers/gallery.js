@@ -1,6 +1,7 @@
-const { readAllStories } = require('../services/dbService')
+// const { readAllStories } = require('../services/dbService')
+const { readAllStories } = require('../services/firestore.service')
 const carouselItems = require('../constants/homecarousel')
-const { defaultImg } = require('../constants/globals')
+const { defaultImg, getBannerImgRoot } = require('../constants/globals')
 
 const galleryController = async (req, res, next) => {
     const r = await readAllStories()
@@ -16,7 +17,7 @@ const galleryController = async (req, res, next) => {
 
     // Let's group tales by genre
     let groups = r.tales.reduce((acc, t) => {
-        t.info.imgUrl = t.info.imgUrl ? `/ups/banners/${t.info.imgUrl}` : defaultImg
+        t.info.imgUrl = t.info.imgUrl ? `${getBannerImgRoot()}/${t.info.imgUrl}` : defaultImg
         acc[t.info.genre] = acc[t.info.genre] || []
         acc[t.info.genre].push(t)
         return acc

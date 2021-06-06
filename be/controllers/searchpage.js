@@ -4,7 +4,7 @@ const MSG = require('../constants/msg')
 const { getDB } = require('../services/mongo')
 const CONFIG = require('../../config')
 const { searchTales } = require('../services/dbService')
-const { defaultImg } = require('../constants/globals')
+const { defaultImg, getBannerImgRoot } = require('../constants/globals')
 
 const searchPageController = async (req, res, next) => {
     let groups = {}
@@ -21,7 +21,7 @@ const searchPageController = async (req, res, next) => {
 
         // Let's group tales by genre
         groups = r.tales.reduce((acc, t) => {
-            t.info.imgUrl = t.info.imgUrl ? `/ups/banners/${t.info.imgUrl}` : defaultImg
+            t.info.imgUrl = t.info.imgUrl ? `${getBannerImgRoot()}/${t.info.imgUrl}` : defaultImg
             acc[t.info.genre] = acc[t.info.genre] || []
             acc[t.info.genre].push(t)
             return acc

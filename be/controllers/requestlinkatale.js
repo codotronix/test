@@ -8,32 +8,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const TNotification_1 = require("../types/TNotification");
+const MSG = require('../constants/msg');
 const CONFIG = require('../../config');
-const mongo_1 = require("../services/mongo");
-const msg_1 = __importDefault(require("../constants/msg"));
+const { getUserByEmail, getNotifsBy, setNotification } = require('../services/firestore.service');
 const crypter_1 = require("../utils/crypter");
 const requestLinkATaleController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { fromUrl, fromStoryName, fromStoryUrl, fromStID, toUrl, choiceTxt, authorEmailEnc } = req.body;
     if (!fromUrl || !fromStoryName || !fromStoryUrl || !fromStID || !toUrl || !choiceTxt || !authorEmailEnc) {
-        res.json(msg_1.default.SIGNIN_PARAMSMISSING);
+        res.json(MSG.SIGNIN_PARAMSMISSING);
         return;
     }
     try {
-        const db = mongo_1.getDB();
-        let user = yield db.collection(CONFIG.usersCollection)
-            .findOne({ email: req.email });
+        let user = yield getUserByEmail(req.email);
         if (!user) {
-            res.json(msg_1.default.SIGNIN_EMAILNOTEXIST);
+            res.json(MSG.SIGNIN_EMAILNOTEXIST);
             return;
         }
         const authorEmail = crypter_1.decrypt(authorEmailEnc);
         if (authorEmail === req.email) {
-            res.json(msg_1.default.NOTIF_LINKTOSELFNOTALLOWED);
+            res.json(MSG.NOTIF_LINKTOSELFNOTALLOWED);
             return;
         }
         let newLinkReqObj = {
@@ -47,22 +42,21 @@ const requestLinkATaleController = (req, res, next) => __awaiter(void 0, void 0,
             doC: Date.now()
         };
         const MAX_REQ_PER_USER = 5;
-        let existingLinkReqs = yield db.collection(CONFIG.notifCollection)
-            .find({ requestorEmail: req.email,
+        let existingLinkReqs = yield getNotifsBy({
+            requestorEmail: req.email,
             name: TNotification_1.E_NOTIF_NAME.LINK_A_TALE_REQUEST
-        })
-            .toArray();
+        });
         if (existingLinkReqs && existingLinkReqs.length > MAX_REQ_PER_USER) {
-            return res.json(msg_1.default.NOTIF_LINKATALELIMIT);
+            return res.json(MSG.NOTIF_LINKATALELIMIT);
         }
         if (existingLinkReqs && existingLinkReqs.length > 0) {
             if (existingLinkReqs.some(linkObj => linkObj.fromStoryUrl === fromStoryUrl &&
                 linkObj.fromStID === fromStID &&
                 linkObj.choiceTxt === choiceTxt)) {
-                return res.json(msg_1.default.NOTIF_LINKATALEDUPLICATE);
+                return res.json(MSG.NOTIF_LINKATALEDUPLICATE);
             }
         }
-        yield db.collection(CONFIG.notifCollection).insertOne(newLinkReqObj);
+        yield setNotification(newLinkReqObj);
         res.json({
             status: 200,
             msg: 'Request sent successfully ...'
@@ -70,7 +64,7 @@ const requestLinkATaleController = (req, res, next) => __awaiter(void 0, void 0,
     }
     catch (err) {
         console.log(err);
-        res.json(msg_1.default.GENERIC_FAILURE);
+        res.json(MSG.GENERIC_FAILURE);
     }
 });
 module.exports = requestLinkATaleController;

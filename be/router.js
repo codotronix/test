@@ -5,6 +5,7 @@ const formidableMiddleware = require('express-formidable')
 const ROUTES = require('./constants/routes')
 const authGuard = require('./middlewares/authGuard')
 const authorGuard = require('./middlewares/authorGuard')
+const imposterGuard = require('./middlewares/imposterGuard')
 
 const getLoggedInUserController = require('./controllers/getloggedinuser')
 const getStoryController = require('./controllers/getstory')
@@ -26,6 +27,7 @@ const updateMyReadHistory = require('./controllers/updatemyreadhistory')
 const updateMyPrefences = require('./controllers/updatemypreferences')
 const requestLinkATaleController = require('./controllers/requestlinkatale')
 const execLinkATaleController = require('./controllers/execlinkatale')
+const getMyNotifsController = require('./controllers/getmynotifs')
 
 const homeController = require('./controllers/home')
 const galleryController = require('./controllers/gallery')
@@ -55,6 +57,7 @@ router.post(ROUTES.PUB_UNPUB, authGuard, authorGuard, publishTaleController)
 router.post(ROUTES.UPLOAD_BANNER, formidableMiddleware(), authGuard, authorGuard, uploadBannerController)
 router.post(ROUTES.LINK_A_TALE, authGuard, requestLinkATaleController)
 router.post(ROUTES.EXEC_LINK_A_TALE, authGuard, execLinkATaleController)
+router.post(ROUTES.GET_MYNOTIFS, authGuard, imposterGuard, getMyNotifsController)
 
 
 // SERVER SERVED PAGES

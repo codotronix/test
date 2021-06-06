@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { TextField, Box, Grid, Button }  from '@material-ui/core'
 import ComplexCard from '../../common/cards/ComplexCard'
 import { ONLINE_DATA_SAVE_MY_TALES } from  '../../../redux/actionTypes'
-import { GET_MYSTORIES, DELETE_MYTALE } from '../../../utils/urls'
+import { GET_MYSTORIES, DELETE_MYTALE, getRoot } from '../../../utils/urls'
 import { ajaxGet, ajaxPost } from '../../../utils/ajax'
 import RefreshIcon from '@material-ui/icons/Refresh';
 const { notify, showLoader, hideLoader } = window
@@ -29,8 +29,14 @@ const MyOnlineTales = props => {
         ajaxGet(GET_MYSTORIES)
         .then(res => {
             console.log(res.data);
-            let { status, tales, msg } = res.data
+            let { status, tales, msg, bannerImgRoot } = res.data
             if(status === 200) {
+                tales = tales.map(tale => {
+                    if(tale.info.imgUrl) {
+                        tale.info.imgUrl = bannerImgRoot + '/' + tale.info.imgUrl
+                    }
+                    return tale
+                })
                 cacheMyTales(tales)
             }
             else {
@@ -42,7 +48,7 @@ const MyOnlineTales = props => {
 
     const goTo = url => history.push(url)
     const goToTale = storyUrl => {
-        window.location.href = window.location.origin + '/read/' + storyUrl
+        window.location.href = '//' + getRoot() + '/read/' + storyUrl
     }
     const goToEditTale = id => goTo(`/edit-tale/${id}`)
 
