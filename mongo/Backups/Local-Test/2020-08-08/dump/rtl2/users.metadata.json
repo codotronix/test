@@ -1,1 +1,0 @@
-{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"rtl2.users"}],"uuid":"d28c6ec3b92c43c19adc76329f2cc69c"}
