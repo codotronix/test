@@ -1,8 +1,0 @@
-# login to heroku cli
-heroku login
-
-# Add remote (for the first time only)
-heroku git:remote -a reactale
-
-# Push changes to heroku
-git push heroku master
